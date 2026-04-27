@@ -1,0 +1,95 @@
+.heroContainer {
+  position: relative;
+  width: 100%;
+  height: 75vh;
+  min-height: 500px;
+  max-height: 900px;
+  overflow: hidden;
+  background-color: #ffffff;
+  /* 배경색을 흰색으로 변경 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.imageWrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  /* 이미지가 잘리지 않고 전체가 다 보이게 설정 */
+  filter: brightness(0.9);
+}
+
+.content {
+  position: relative;
+  text-align: center;
+  color: #ffffff;
+  z-index: 2;
+  padding: 0 20px;
+  max-width: 900px;
+}
+
+.title {
+  font-size: 3.5rem;
+  font-weight: 800;
+  margin-bottom: 1.5rem;
+  color: #000000;
+  /* 텍스트 색상을 검은색으로 변경 */
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.description {
+  font-size: 1.4rem;
+  margin-bottom: 2.5rem;
+  color: #333333;
+  /* 설명 텍스트 색상을 어두운 그레이로 변경 */
+  line-height: 1.6;
+}
+
+.button {
+  display: inline-block;
+  padding: 1rem 2.5rem;
+  background-color: var(--primary);
+  color: #ffffff;
+  border-radius: 4px;
+  font-weight: 700;
+  font-size: 1.1rem;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  border: 2px solid var(--primary);
+}
+
+.button:hover {
+  background-color: transparent;
+  color: #ffffff;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .heroContainer {
+    height: 500px;
+  }
+
+  .title {
+    font-size: 2.5rem;
+  }
+
+  .description {
+    font-size: 1.1rem;
+  }
+
+  .button {
+    padding: 0.8rem 2rem;
+    font-size: 1rem;
+  }
+}
