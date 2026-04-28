@@ -37,7 +37,7 @@ export default function AdminDashboard() {
     <div className={styles.card}>
       <div className={styles.header}>
         <h2>관리자 대시보드</h2>
-        <p style={{ color: '#666', marginTop: '0.5rem' }}>KJNSYS 홈페이지 콘텐츠 관리 시스템입니다.</p>
+        <p style={{ color: '#666', marginTop: '0.5rem' }}>케이제이엔시스 홈페이지 콘텐츠 관리 시스템입니다.</p>
       </div>
       
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1.5rem', marginTop: '2rem' }}>

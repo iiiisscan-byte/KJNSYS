@@ -1,0 +1,81 @@
+.sliderWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.sliderContainer {
+  width: 100%;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding: 10px 0 40px;
+}
+
+.sliderContainer::-webkit-scrollbar {
+  display: none;
+}
+
+.sliderContent {
+  display: flex;
+  gap: 30px;
+}
+
+.cardWrapper {
+  flex: 0 0 350px;
+  transition: transform 0.3s ease;
+}
+
+.navButton {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 50px;
+  height: 50px;
+  background: #ffffff;
+  border: 1px solid #eee;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  color: #000;
+}
+
+.navButton:hover {
+  background: #000;
+  color: #ffffff;
+  border-color: #000;
+}
+
+.prevButton {
+  left: -25px;
+}
+
+.nextButton {
+  right: -25px;
+}
+
+@media (max-width: 1024px) {
+  .cardWrapper {
+    flex: 0 0 300px;
+  }
+}
+
+@media (max-width: 768px) {
+  .cardWrapper {
+    flex: 0 0 280px;
+  }
+  
+  .prevButton {
+    left: -10px;
+  }
+  
+  .nextButton {
+    right: -10px;
+  }
+}

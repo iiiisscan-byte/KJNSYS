@@ -6,7 +6,7 @@ import { FiMenu, FiX } from "react-icons/fi";
 import styles from "./Header.module.css";
 
 const navItems = [
-  { label: "회사소개", href: "/" },
+  { label: "회사소개", href: "/#about" },
   { label: "제품", href: "/product" },
   { label: "솔루션", href: "/solution" },
   { label: "고객지원", href: "/service" },
@@ -20,7 +20,7 @@ export default function Header() {
     <header className={styles.header}>
       <div className={`container ${styles.container}`}>
         <Link href="/" className={styles.logo}>
-          <img src="/logo.png" alt="KJ&SYS Logo" style={{ height: "40px", width: "auto", display: "block" }} />
+          <img src="/logo.png" alt="케이제이엔시스 로고" style={{ height: "40px", width: "auto", display: "block" }} />
         </Link>
         
         <nav className={styles.nav}>

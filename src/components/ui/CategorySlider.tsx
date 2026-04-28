@@ -16,33 +16,63 @@ interface Category {
 const categories: Category[] = [
   {
     id: 1,
-    name: "대형프린터",
-    image: "/images/categories/large_printer.png",
-    link: "/products?category=large-printer"
+    name: "평판 스캐너",
+    image: "/images/categories/flatbed_scanner.png",
+    link: "/products?category=flatbed"
   },
   {
     id: 2,
-    name: "스캐너",
-    image: "/images/categories/scanner.png",
-    link: "/products?category=scanner"
+    name: "고속 스캐너",
+    image: "/images/categories/high_speed_scanner.png",
+    link: "/products?category=high-speed"
   },
   {
     id: 3,
-    name: "라벨 프린터",
-    image: "/images/categories/label_printer.png",
-    link: "/products?category=label-printer"
+    name: "북 스캐너",
+    image: "/images/categories/book_scanner.png",
+    link: "/products?category=book"
   },
   {
     id: 4,
-    name: "POS 프린터",
-    image: "/images/categories/pos_printer.png",
-    link: "/products?category=pos-printer"
+    name: "상품권 스캐너",
+    image: "/images/categories/voucher_scanner.png",
+    link: "/products?category=voucher"
   },
   {
     id: 5,
-    name: "산업용 로봇",
-    image: "/images/categories/industrial_robot.png",
-    link: "/products?category=industrial-robot"
+    name: "바코드 스캐너",
+    image: "/images/categories/barcode_scanner.png",
+    link: "/products?category=barcode"
+  },
+  {
+    id: 6,
+    name: "지문 스캐너",
+    image: "/images/categories/fingerprint_scanner.png",
+    link: "/products?category=fingerprint"
+  },
+  {
+    id: 7,
+    name: "필름 스캐너",
+    image: "/images/categories/film_scanner.png",
+    link: "/products?category=film"
+  },
+  {
+    id: 8,
+    name: "표본 스캐너",
+    image: "/images/categories/specimen_scanner.png",
+    link: "/products?category=specimen"
+  },
+  {
+    id: 9,
+    name: "신분증 스캐너",
+    image: "/images/categories/id_card_scanner.png",
+    link: "/products?category=id-card"
+  },
+  {
+    id: 10,
+    name: "생명공학 스캐너",
+    image: "/images/categories/biotech_scanner.png",
+    link: "/products?category=biotech"
   }
 ];
 
@@ -63,7 +93,7 @@ const CategorySlider = () => {
   return (
     <section className={styles.section}>
       <div className={styles.container}>
-        <h2 className={styles.title}>KJ&SYS의 다양한 제품과 솔루션을 만나보세요</h2>
+        <h2 className={styles.title}>케이제이엔시스의 다양한 제품과 솔루션을 만나보세요</h2>
         
         <div className={styles.sliderWrapper}>
           <button 
