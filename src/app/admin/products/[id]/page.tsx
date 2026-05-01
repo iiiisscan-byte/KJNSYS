@@ -81,18 +81,16 @@ export default function EditProduct({ params }: { params: Promise<{ id: string }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!title || !categoryId) return alert("필수 항목을 입력해주세요.");
+    if (!title || !categoryId) return alert("제품명과 카테고리는 필수 항목입니다.");
     
     setIsSubmitting(true);
     try {
-      let imageUrl = imagePreview; // 기존 이미지 유지 (새 파일이 없으면)
+      let imageUrl = imagePreview; 
       
-      // 새 이미지 파일이 선택된 경우 업로드
       if (imageFile) {
         imageUrl = await uploadImage(imageFile);
       }
 
-      // DB 업데이트
       const { error } = await supabase.from("products").update({
         title,
         category_id: categoryId,
@@ -105,86 +103,111 @@ export default function EditProduct({ params }: { params: Promise<{ id: string }
       
       alert("성공적으로 수정되었습니다.");
       router.push("/admin/products");
-    } catch (error) {
-      console.error("Error updating product:", error);
-      alert("오류가 발생했습니다.");
+    } catch (error: any) {
+      console.error("수정 에러:", error);
+      alert(`오류가 발생했습니다: ${error.message || "알 수 없는 오류"}`);
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  if (isLoading) return <div>로딩 중...</div>;
+  if (isLoading) return <div style={{ textAlign: "center", padding: "5rem" }}>데이터를 불러오는 중...</div>;
 
   return (
-    <div style={{ maxWidth: "800px", margin: "0 auto", paddingBottom: "5rem" }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "2rem" }}>
-        <h2>제품/솔루션 수정</h2>
+    <div style={{ maxWidth: "900px", margin: "0 auto", padding: "2rem 1rem 5rem" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "2.5rem" }}>
+        <div>
+          <h2 style={{ fontSize: "1.8rem", fontWeight: "800", color: "#1a1a1a" }}>제품/솔루션 수정</h2>
+          <p style={{ color: "#666", marginTop: "0.4rem" }}>기존 콘텐츠의 정보를 업데이트합니다.</p>
+        </div>
         <Link 
           href="/admin/products"
-          style={{ padding: "0.5rem 1rem", border: "1px solid #ccc", color: "#333", textDecoration: "none", borderRadius: "4px" }}
+          style={{ padding: "0.6rem 1.2rem", border: "1px solid #ddd", color: "#666", textDecoration: "none", borderRadius: "6px", fontSize: "0.9rem", fontWeight: "600" }}
         >
-          취소 및 목록으로
+          목록으로 돌아가기
         </Link>
       </div>
 
-      <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "1.5rem", backgroundColor: "#fff", padding: "2rem", borderRadius: "8px", border: "1px solid #e0e0e0" }}>
+      <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
         
-        <div>
-          <label style={{ display: "block", marginBottom: "0.5rem", fontWeight: "bold" }}>제품/솔루션명 *</label>
-          <input 
-            type="text" 
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            style={{ width: "100%", padding: "0.8rem", border: "1px solid #ccc", borderRadius: "4px" }}
-            required
-          />
-        </div>
-
-        <div>
-          <label style={{ display: "block", marginBottom: "0.5rem", fontWeight: "bold" }}>카테고리 *</label>
-          <select 
-            value={categoryId}
-            onChange={(e) => setCategoryId(e.target.value)}
-            style={{ width: "100%", padding: "0.8rem", border: "1px solid #ccc", borderRadius: "4px" }}
-            required
-          >
-            <option value="" disabled>카테고리 선택</option>
-            {categories.map(cat => (
-              <option key={cat.id} value={cat.id}>
-                {cat.type === "solution" ? "[솔루션]" : "[제품]"} {cat.name}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <div>
-          <label style={{ display: "block", marginBottom: "0.5rem", fontWeight: "bold" }}>짧은 설명</label>
-          <textarea 
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            style={{ width: "100%", padding: "0.8rem", border: "1px solid #ccc", borderRadius: "4px", minHeight: "80px" }}
-          />
-        </div>
-
-        <div>
-          <label style={{ display: "block", marginBottom: "0.5rem", fontWeight: "bold" }}>대표 이미지 변경</label>
-          <input 
-            type="file" 
-            accept="image/*"
-            onChange={handleImageChange}
-            style={{ width: "100%", padding: "0.8rem", border: "1px solid #ccc", borderRadius: "4px" }}
-          />
-          {imagePreview && (
-            <div style={{ marginTop: "1rem" }}>
-              <img src={imagePreview} alt="Preview" style={{ maxWidth: "200px", border: "1px solid #eee", borderRadius: "4px" }} />
-              {!imageFile && <p style={{ fontSize: "0.8rem", color: "#666", marginTop: "0.5rem" }}>현재 등록된 이미지입니다. (새 파일을 선택하면 교체됩니다)</p>}
+        {/* 기본 정보 섹션 */}
+        <section style={{ backgroundColor: "#fff", padding: "2rem", borderRadius: "12px", border: "1px solid #eee", boxShadow: "0 2px 10px rgba(0,0,0,0.02)" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.5rem" }}>
+            <div style={{ gridColumn: "span 2" }}>
+              <label style={{ display: "block", marginBottom: "0.6rem", fontWeight: "700", color: "#333" }}>제품/솔루션명 *</label>
+              <input 
+                type="text" 
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                style={{ width: "100%", padding: "0.8rem 1rem", border: "1px solid #e0e0e0", borderRadius: "8px", fontSize: "1rem" }}
+                required
+              />
             </div>
-          )}
-        </div>
 
-        <div style={{ marginBottom: "2rem" }}>
-          <label style={{ display: "block", marginBottom: "0.5rem", fontWeight: "bold" }}>상세 내용</label>
-          <div style={{ height: "400px", marginBottom: "2rem" }}>
+            <div style={{ gridColumn: "span 2" }}>
+              <label style={{ display: "block", marginBottom: "0.6rem", fontWeight: "700", color: "#333" }}>카테고리 선택 *</label>
+              <select 
+                value={categoryId}
+                onChange={(e) => setCategoryId(e.target.value)}
+                style={{ width: "100%", padding: "0.8rem 1rem", border: "1px solid #e0e0e0", borderRadius: "8px", fontSize: "1rem", backgroundColor: "#fff" }}
+                required
+              >
+                {categories.map(cat => (
+                  <option key={cat.id} value={cat.id}>
+                    [{cat.type === "solution" ? "솔루션" : "제품"}] {cat.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div style={{ gridColumn: "span 2" }}>
+              <label style={{ display: "block", marginBottom: "0.6rem", fontWeight: "700", color: "#333" }}>짧은 설명 (목록 표시용)</label>
+              <textarea 
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                style={{ width: "100%", padding: "0.8rem 1rem", border: "1px solid #e0e0e0", borderRadius: "8px", fontSize: "1rem", minHeight: "80px", resize: "vertical" }}
+              />
+            </div>
+          </div>
+        </section>
+
+        {/* 이미지 섹션 */}
+        <section style={{ backgroundColor: "#fff", padding: "2rem", borderRadius: "12px", border: "1px solid #eee" }}>
+          <label style={{ display: "block", marginBottom: "1rem", fontWeight: "700", color: "#333" }}>대표 이미지 변경</label>
+          <div style={{ display: "flex", gap: "2rem", alignItems: "center" }}>
+            <div style={{ 
+              width: "200px", 
+              height: "200px", 
+              backgroundColor: "#f9f9f9", 
+              border: "2px dashed #ddd", 
+              borderRadius: "12px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              overflow: "hidden"
+            }}>
+              {imagePreview ? (
+                <img src={imagePreview} alt="Preview" style={{ width: "100%", height: "100%", objectFit: "contain" }} />
+              ) : (
+                <span style={{ color: "#aaa", fontSize: "0.9rem" }}>이미지 없음</span>
+              )}
+            </div>
+            <div style={{ flex: 1 }}>
+              <input 
+                type="file" 
+                accept="image/*"
+                onChange={handleImageChange}
+                style={{ marginBottom: "0.5rem" }}
+              />
+              <p style={{ fontSize: "0.85rem", color: "#888" }}>{imageFile ? "새 파일이 선택되었습니다." : "현재 등록된 이미지입니다. 변경하려면 파일을 선택하세요."}</p>
+            </div>
+          </div>
+        </section>
+
+        {/* 상세 에디터 섹션 */}
+        <section style={{ backgroundColor: "#fff", padding: "2rem", borderRadius: "12px", border: "1px solid #eee" }}>
+          <label style={{ display: "block", marginBottom: "1.5rem", fontWeight: "700", color: "#333" }}>상세 설명 및 기술 사양</label>
+          <div style={{ height: "500px", marginBottom: "3rem" }}>
             <ReactQuill 
               theme="snow" 
               value={content} 
@@ -192,25 +215,34 @@ export default function EditProduct({ params }: { params: Promise<{ id: string }
               style={{ height: "100%" }}
             />
           </div>
-        </div>
+        </section>
 
-        <button 
-          type="submit"
-          disabled={isSubmitting}
-          style={{ 
-            padding: "1rem", 
-            backgroundColor: "#000", 
-            color: "#fff", 
-            border: "none", 
-            borderRadius: "4px", 
-            fontWeight: "bold",
-            cursor: isSubmitting ? "not-allowed" : "pointer",
-            opacity: isSubmitting ? 0.7 : 1,
-            marginTop: "1rem"
-          }}
-        >
-          {isSubmitting ? "저장 중..." : "수정 완료"}
-        </button>
+        <div style={{ display: "flex", gap: "1rem", justifyContent: "flex-end" }}>
+          <button 
+            type="button" 
+            onClick={() => router.back()}
+            style={{ padding: "1rem 2rem", backgroundColor: "#fff", color: "#333", border: "1px solid #ddd", borderRadius: "8px", fontWeight: "600", cursor: "pointer" }}
+          >
+            취소
+          </button>
+          <button 
+            type="submit"
+            disabled={isSubmitting}
+            style={{ 
+              padding: "1rem 3rem", 
+              backgroundColor: "#000", 
+              color: "#fff", 
+              border: "none", 
+              borderRadius: "8px", 
+              fontWeight: "700",
+              fontSize: "1.1rem",
+              cursor: isSubmitting ? "not-allowed" : "pointer",
+              opacity: isSubmitting ? 0.6 : 1
+            }}
+          >
+            {isSubmitting ? "저장 중..." : "수정 완료하기"}
+          </button>
+        </div>
 
       </form>
     </div>

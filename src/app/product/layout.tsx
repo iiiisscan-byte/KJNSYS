@@ -1,20 +1,35 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { supabase } from "@/lib/supabase";
 import LNB from "@/components/layout/LNB";
 import { FiBox } from "react-icons/fi";
 
-const productNav = [
-  { label: "평판 스캐너", href: "/product" },
-  { label: "고속 스캐너", href: "/product/highspeed" },
-  { label: "북 스캐너", href: "/product/book" },
-  { label: "상품권 스캐너", href: "/product/voucher" },
-  { label: "바코드 스캐너", href: "/product/barcode" },
-  { label: "지문 스캐너", href: "/product/fingerprint" },
-  { label: "필름 스캐너", href: "/product/film" },
-  { label: "표본 스캐너", href: "/product/specimen" },
-  { label: "신분증 스캐너", href: "/product/idcard" },
-  { label: "생명공학 스캐너", href: "/product/bio" },
-];
-
 export default function ProductLayout({ children }: { children: React.ReactNode }) {
+  const [categories, setCategories] = useState<{ label: string; href: string }[]>([]);
+
+  useEffect(() => {
+    async function fetchCategories() {
+      const { data, error } = await supabase
+        .from("categories")
+        .select("id, name")
+        .eq("type", "product")
+        .order("name", { ascending: true });
+
+      if (error) {
+        console.error("Error fetching product categories:", error);
+      } else if (data) {
+        const navItems = data.map(cat => ({
+          label: cat.name,
+          href: `/product?category=${cat.id}`
+        }));
+        // 기본 '전체' 메뉴 추가 (필요시)
+        setCategories([{ label: "전체", href: "/product" }, ...navItems]);
+      }
+    }
+    fetchCategories();
+  }, []);
+
   return (
     <>
       <div style={{ backgroundColor: '#f5f5f7', padding: '2.5rem 0', marginBottom: '0' }}>
@@ -40,7 +55,7 @@ export default function ProductLayout({ children }: { children: React.ReactNode 
           </p>
         </div>
       </div>
-      <LNB items={productNav} />
+      <LNB items={categories.length > 0 ? categories : []} />
       {children}
     </>
   );

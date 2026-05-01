@@ -56,21 +56,29 @@ export default function InquiryManagement() {
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm("정말 이 문의를 삭제하시겠습니까? 복구할 수 없습니다.")) return;
+    console.log("문의 삭제 시도 ID:", id);
 
-    const { error } = await supabase
-      .from("inquiries")
-      .delete()
-      .eq("id", id);
+    try {
+      const { data, error } = await supabase
+        .from("inquiries")
+        .delete()
+        .eq("id", id)
+        .select();
 
-    if (error) {
-      console.error("Error deleting inquiry:", error);
-      alert("삭제에 실패했습니다.");
-    } else {
-      fetchInquiries();
-      if (selectedInquiry && selectedInquiry.id === id) {
-        setSelectedInquiry(null);
+      if (error) {
+        console.error("Error deleting inquiry:", error);
+        alert(`삭제에 실패했습니다: ${error.message}`);
+      } else if (!data || data.length === 0) {
+        alert("삭제할 대상을 찾지 못했습니다.");
+      } else {
+        alert("성공적으로 삭제되었습니다.");
+        fetchInquiries();
+        if (selectedInquiry && selectedInquiry.id === id) {
+          setSelectedInquiry(null);
+        }
       }
+    } catch (err: any) {
+      alert(`시스템 에러: ${err.message}`);
     }
   };
 

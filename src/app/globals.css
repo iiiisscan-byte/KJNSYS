@@ -65,8 +65,14 @@ h3 { font-size: 1.75rem; }
 .text-center { text-align: center; }
 .mb-1 { margin-bottom: 1rem; }
 .mb-2 { margin-bottom: 2rem; }
+.mb-4 { margin-bottom: 4rem; }
+.mb-6 { margin-bottom: 6rem; }
+.mb-8 { margin-bottom: 8rem; }
+.mb-10 { margin-bottom: 10rem; }
 .mt-1 { margin-top: 1rem; }
 .mt-2 { margin-top: 2rem; }
+.mt-4 { margin-top: 4rem; }
+.mt-8 { margin-top: 8rem; }
 .flex { display: flex; }
 .items-center { align-items: center; }
 .justify-between { justify-content: space-between; }
@@ -81,4 +87,5 @@ h3 { font-size: 1.75rem; }
 
 .main-content {
   flex: 1;
+  padding-bottom: 4rem; /* Ensure space before footer on all pages */
 }

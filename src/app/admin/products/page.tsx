@@ -45,18 +45,26 @@ export default function ProductManagement() {
   }, []);
 
   const handleDelete = async (id: string) => {
-    if (!confirm("정말 이 제품/솔루션을 삭제하시겠습니까? 복구할 수 없습니다.")) return;
+    console.log("제품 삭제 시도 ID:", id);
 
-    const { error } = await supabase
-      .from("products")
-      .delete()
-      .eq("id", id);
+    try {
+      const { data, error } = await supabase
+        .from("products")
+        .delete()
+        .eq("id", id)
+        .select();
 
-    if (error) {
-      console.error("Error deleting product:", error);
-      alert("삭제에 실패했습니다.");
-    } else {
-      fetchProducts();
+      if (error) {
+        console.error("Error deleting product:", error);
+        alert(`삭제 실패: ${error.message}`);
+      } else if (!data || data.length === 0) {
+        alert("삭제할 대상을 찾지 못했습니다.");
+      } else {
+        alert("성공적으로 삭제되었습니다.");
+        fetchProducts();
+      }
+    } catch (err: any) {
+      alert(`시스템 에러: ${err.message}`);
     }
   };
 
@@ -78,22 +86,22 @@ export default function ProductManagement() {
     <div>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "2rem" }}>
         <div>
-          <h2>제품 및 솔루션 관리</h2>
+          <h2 style={{ fontSize: "1.8rem", fontWeight: "800" }}>제품 및 솔루션 관리</h2>
           <p style={{ color: "#666", marginTop: "0.5rem" }}>웹사이트에 표시될 제품과 솔루션을 관리합니다.</p>
         </div>
         <Link 
           href="/admin/products/create"
-          style={{ padding: "0.8rem 1.5rem", backgroundColor: "#000", color: "#fff", textDecoration: "none", borderRadius: "4px", fontWeight: "bold" }}
+          style={{ padding: "0.8rem 1.5rem", backgroundColor: "#000", color: "#fff", textDecoration: "none", borderRadius: "8px", fontWeight: "bold" }}
         >
           + 신규 등록
         </Link>
       </div>
 
-      <div style={{ padding: "1.5rem", border: "1px solid #e0e0e0", borderRadius: "8px", backgroundColor: "#fff" }}>
+      <div style={{ padding: "1.5rem", border: "1px solid #e0e0e0", borderRadius: "12px", backgroundColor: "#fff" }}>
         {loading ? (
           <p>로딩 중...</p>
         ) : products.length === 0 ? (
-          <div style={{ textAlign: "center", padding: "3rem 0", color: "#666" }}>
+          <div style={{ textAlign: "center", padding: "3rem 0", color: "#999" }}>
             <p>등록된 제품이나 솔루션이 없습니다.</p>
             <Link href="/admin/products/create" style={{ color: "#000", fontWeight: "bold", textDecoration: "underline", marginTop: "1rem", display: "inline-block" }}>
               첫 번째 항목 등록하기
@@ -102,7 +110,7 @@ export default function ProductManagement() {
         ) : (
           <table style={{ width: "100%", borderCollapse: "collapse" }}>
             <thead>
-              <tr style={{ borderBottom: "2px solid #000", textAlign: "left" }}>
+              <tr style={{ borderBottom: "2px solid #eee", textAlign: "left" }}>
                 <th style={{ padding: "1rem 0.5rem" }}>상태</th>
                 <th style={{ padding: "1rem 0.5rem" }}>분류</th>
                 <th style={{ padding: "1rem 0.5rem" }}>제품/솔루션명</th>
@@ -112,12 +120,12 @@ export default function ProductManagement() {
             </thead>
             <tbody>
               {products.map((item) => (
-                <tr key={item.id} style={{ borderBottom: "1px solid #eee" }}>
+                <tr key={item.id} style={{ borderBottom: "1px solid #f5f5f5" }}>
                   <td style={{ padding: "1rem 0.5rem" }}>
                     <button 
                       onClick={() => handleToggleActive(item.id, item.is_active)}
                       style={{ 
-                        padding: "0.3rem 0.6rem", 
+                        padding: "0.4rem 0.8rem", 
                         borderRadius: "20px", 
                         border: "none",
                         fontSize: "0.8rem",
@@ -148,13 +156,13 @@ export default function ProductManagement() {
                     <div style={{ display: "flex", gap: "0.5rem", justifyContent: "flex-end" }}>
                       <Link 
                         href={`/admin/products/${item.id}`}
-                        style={{ padding: "0.4rem 0.8rem", backgroundColor: "#f5f5f5", color: "#333", textDecoration: "none", border: "1px solid #ddd", borderRadius: "4px", fontSize: "0.9rem" }}
+                        style={{ padding: "0.4rem 0.8rem", backgroundColor: "#f5f5f5", color: "#333", textDecoration: "none", border: "1px solid #ddd", borderRadius: "6px", fontSize: "0.9rem" }}
                       >
                         수정
                       </Link>
                       <button
                         onClick={() => handleDelete(item.id)}
-                        style={{ padding: "0.4rem 0.8rem", backgroundColor: "#fff", color: "#ff4d4f", border: "1px solid #ff4d4f", borderRadius: "4px", fontSize: "0.9rem", cursor: "pointer" }}
+                        style={{ padding: "0.4rem 0.8rem", backgroundColor: "transparent", color: "#ff4d4f", border: "1px solid #ff4d4f", borderRadius: "6px", fontSize: "0.9rem", cursor: "pointer" }}
                       >
                         삭제
                       </button>

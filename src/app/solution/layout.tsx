@@ -1,12 +1,34 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { supabase } from "@/lib/supabase";
 import LNB from "@/components/layout/LNB";
 import { FiLayers } from "react-icons/fi";
 
-const solutionNav = [
-  { label: "스캔 솔루션", href: "/solution" },
-  { label: "가상화 솔루션", href: "/solution/virtualization" },
-];
-
 export default function SolutionLayout({ children }: { children: React.ReactNode }) {
+  const [categories, setCategories] = useState<{ label: string; href: string }[]>([]);
+
+  useEffect(() => {
+    async function fetchCategories() {
+      const { data, error } = await supabase
+        .from("categories")
+        .select("id, name")
+        .eq("type", "solution")
+        .order("name", { ascending: true });
+
+      if (error) {
+        console.error("Error fetching solution categories:", error);
+      } else if (data) {
+        const navItems = data.map(cat => ({
+          label: cat.name,
+          href: `/solution?category=${cat.id}`
+        }));
+        setCategories([{ label: "전체", href: "/solution" }, ...navItems]);
+      }
+    }
+    fetchCategories();
+  }, []);
+
   return (
     <>
       <div style={{ backgroundColor: '#f5f5f7', padding: '2.5rem 0', marginBottom: '0' }}>
@@ -32,7 +54,7 @@ export default function SolutionLayout({ children }: { children: React.ReactNode
           </p>
         </div>
       </div>
-      <LNB items={solutionNav} />
+      <LNB items={categories.length > 0 ? categories : []} />
       {children}
     </>
   );

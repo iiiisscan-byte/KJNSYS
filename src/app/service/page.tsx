@@ -1,6 +1,6 @@
 export default function ServicePage() {
   return (
-    <div className="container mt-4 mb-4">
+    <div className="container mt-4 mb-8">
       <h2 className="mb-4 text-center" style={{ fontSize: '2.2rem', fontWeight: '800' }}>고객센터 안내</h2>
       
       <div style={{ 

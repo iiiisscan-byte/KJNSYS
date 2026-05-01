@@ -29,22 +29,22 @@ export default function InquiryPage() {
 
     const fullMessage = `[문의 유형: ${formData.category}]\n[제목: ${formData.title}]\n\n${formData.message}`;
 
-    const { error } = await supabase.from("inquiries").insert([
-      {
-        name: formData.name,
-        email: formData.email,
-        phone: formData.phone,
-        company: formData.company,
-        message: fullMessage,
-        status: "pending",
-      },
-    ]);
+    try {
+      const { error } = await supabase.from("inquiries").insert([
+        {
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          company: formData.company,
+          message: fullMessage,
+          status: "pending",
+        },
+      ]);
 
-    if (error) {
-      console.error("Error submitting inquiry:", error);
-      alert("문의 접수 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.");
-    } else {
+      if (error) throw error;
+
       setIsSuccess(true);
+      // 데이터 초기화
       setFormData({
         name: "",
         email: "",
@@ -54,13 +54,17 @@ export default function InquiryPage() {
         title: "",
         message: "",
       });
+    } catch (error: any) {
+      console.error("Error submitting inquiry:", error);
+      alert(`문의 접수 중 오류가 발생했습니다: ${error.message}`);
+    } finally {
+      setIsSubmitting(false);
     }
-    setIsSubmitting(false);
   };
 
   if (isSuccess) {
     return (
-      <div className="container mt-4 mb-4 text-center">
+      <div className="container mt-4 mb-8 text-center">
         <div style={{ padding: '4rem 2rem', backgroundColor: '#f9f9f9', borderRadius: '12px' }}>
           <h2 style={{ fontSize: '2rem', marginBottom: '1.5rem', color: '#004a99' }}>문의가 성공적으로 접수되었습니다!</h2>
           <p style={{ fontSize: '1.1rem', color: '#666', marginBottom: '2.5rem' }}>
@@ -86,7 +90,7 @@ export default function InquiryPage() {
   }
 
   return (
-    <div className="container mt-2 mb-4">
+    <div className="container mt-2 mb-8">
       <h2 className="mb-2 text-center" style={{ fontSize: '2.2rem', fontWeight: '800' }}>서비스 문의</h2>
       <p className="text-center mb-4" style={{ color: '#666' }}>
         궁금하신 점을 남겨주시면 정성을 다해 답변해 드리겠습니다.

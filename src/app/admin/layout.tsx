@@ -9,6 +9,8 @@ const adminNav = [
   { label: "대시보드", href: "/admin" },
   { label: "카테고리 관리", href: "/admin/categories" },
   { label: "제품/솔루션 관리", href: "/admin/products" },
+  { label: "히어로 배너 관리", href: "/admin/banner" },
+  { label: "팝업 관리", href: "/admin/popups" },
   { label: "서비스 문의 관리", href: "/admin/inquiries" },
 ];
 

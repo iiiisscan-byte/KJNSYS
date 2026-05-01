@@ -4,6 +4,7 @@ import CategorySlider from "@/components/ui/CategorySlider";
 import PromotionSlider from "@/components/ui/PromotionSlider";
 import Link from "next/link";
 import { FiCpu } from "react-icons/fi";
+import PopupManager from "@/components/ui/PopupManager";
 
 export default function Home() {
   const featuredProducts = [
@@ -38,6 +39,9 @@ export default function Home() {
 
   return (
     <>
+      {/* 팝업 관리자 */}
+      <PopupManager />
+
       {/* 1. Hero Section */}
       <section aria-label="메인 배너">
         <Carousel />
