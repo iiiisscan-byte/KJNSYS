@@ -14,7 +14,7 @@ export default function SolutionLayout({ children }: { children: React.ReactNode
         .from("categories")
         .select("id, name")
         .eq("type", "solution")
-        .order("name", { ascending: true });
+        .order("created_at", { ascending: false });
 
       if (error) {
         console.error("Error fetching solution categories:", error);

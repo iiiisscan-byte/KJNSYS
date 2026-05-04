@@ -3,12 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import dynamic from "next/dynamic";
 import { supabase } from "@/lib/supabase";
-import "react-quill-new/dist/quill.snow.css";
-
-// ReactQuill은 SSR에서 에러를 낼 수 있으므로 dynamic import 사용
-const ReactQuill = dynamic(() => import("react-quill-new"), { ssr: false });
 
 export default function CreateProduct() {
   const router = useRouter();
@@ -17,11 +12,17 @@ export default function CreateProduct() {
 
   // Form State
   const [title, setTitle] = useState("");
+  const [manufacturer, setManufacturer] = useState("");
   const [categoryId, setCategoryId] = useState("");
   const [description, setDescription] = useState("");
-  const [content, setContent] = useState("");
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+
+  // Features State
+  const [features, setFeatures] = useState<{ id: string; title: string; description: string; icon_url: string | null; file: File | null; preview: string | null }[]>([]);
+  
+  // Specifications State
+  const [specifications, setSpecifications] = useState<{ id: string; label: string; value: string }[]>([]);
 
   useEffect(() => {
     async function fetchCategories() {
@@ -64,6 +65,38 @@ export default function CreateProduct() {
     return data.publicUrl;
   };
 
+  const addFeature = () => {
+    setFeatures([...features, { id: Math.random().toString(), title: "", description: "", icon_url: null, file: null, preview: null }]);
+  };
+
+  const removeFeature = (id: string) => {
+    setFeatures(features.filter(f => f.id !== id));
+  };
+
+  const handleFeatureChange = (id: string, field: string, value: any) => {
+    setFeatures(features.map(f => {
+      if (f.id === id) {
+        if (field === "file" && value) {
+          return { ...f, file: value, preview: URL.createObjectURL(value) };
+        }
+        return { ...f, [field]: value };
+      }
+      return f;
+    }));
+  };
+
+  const addSpecification = () => {
+    setSpecifications([...specifications, { id: Math.random().toString(), label: "", value: "" }]);
+  };
+
+  const removeSpecification = (id: string) => {
+    setSpecifications(specifications.filter(s => s.id !== id));
+  };
+
+  const handleSpecificationChange = (id: string, field: string, value: string) => {
+    setSpecifications(specifications.map(s => s.id === id ? { ...s, [field]: value } : s));
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!title || !categoryId) return alert("제품명과 카테고리는 필수 항목입니다.");
@@ -77,13 +110,27 @@ export default function CreateProduct() {
         imageUrl = await uploadImage(imageFile);
       }
 
+      // 특장점 이미지 업로드 처리
+      const processedFeatures = await Promise.all(features.map(async (f) => {
+        let iconUrl = f.icon_url;
+        if (f.file) {
+          iconUrl = await uploadImage(f.file);
+        }
+        return { title: f.title, description: f.description, icon_url: iconUrl };
+      }));
+
+      // 제품사양 처리
+      const processedSpecs = specifications.map(s => ({ label: s.label, value: s.value }));
+
       // DB 저장
       const { error } = await supabase.from("products").insert([
         {
           title,
           category_id: categoryId,
+          manufacturer,
           description,
-          content,
+          features: processedFeatures,
+          specifications: processedSpecs,
           image_url: imageUrl,
           is_active: true
         }
@@ -121,7 +168,7 @@ export default function CreateProduct() {
         {/* 기본 정보 섹션 */}
         <section style={{ backgroundColor: "#fff", padding: "2rem", borderRadius: "12px", border: "1px solid #eee", boxShadow: "0 2px 10px rgba(0,0,0,0.02)" }}>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.5rem" }}>
-            <div style={{ gridColumn: "span 2" }}>
+            <div style={{ gridColumn: "span 1" }}>
               <label style={{ display: "block", marginBottom: "0.6rem", fontWeight: "700", color: "#333" }}>제품/솔루션명 *</label>
               <input 
                 type="text" 
@@ -130,6 +177,17 @@ export default function CreateProduct() {
                 style={{ width: "100%", padding: "0.8rem 1rem", border: "1px solid #e0e0e0", borderRadius: "8px", fontSize: "1rem" }}
                 placeholder="예: KJ-Flatbed Pro 100"
                 required
+              />
+            </div>
+
+            <div style={{ gridColumn: "span 1" }}>
+              <label style={{ display: "block", marginBottom: "0.6rem", fontWeight: "700", color: "#333" }}>제조사</label>
+              <input 
+                type="text" 
+                value={manufacturer}
+                onChange={(e) => setManufacturer(e.target.value)}
+                style={{ width: "100%", padding: "0.8rem 1rem", border: "1px solid #e0e0e0", borderRadius: "8px", fontSize: "1rem" }}
+                placeholder="예: MICROTEK"
               />
             </div>
 
@@ -156,12 +214,12 @@ export default function CreateProduct() {
             </div>
 
             <div style={{ gridColumn: "span 2" }}>
-              <label style={{ display: "block", marginBottom: "0.6rem", fontWeight: "700", color: "#333" }}>짧은 설명 (목록 표시용)</label>
+              <label style={{ display: "block", marginBottom: "0.6rem", fontWeight: "700", color: "#333" }}>제품소개</label>
               <textarea 
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 style={{ width: "100%", padding: "0.8rem 1rem", border: "1px solid #e0e0e0", borderRadius: "8px", fontSize: "1rem", minHeight: "80px", resize: "vertical" }}
-                placeholder="검색 결과나 목록 페이지에서 보여질 짧은 소개글을 작성하세요."
+                placeholder="제품 또는 솔루션에 대한 소개글을 작성하세요. (이 내용은 상세 페이지 상단과 목록에 노출됩니다.)"
               />
             </div>
           </div>
@@ -200,19 +258,128 @@ export default function CreateProduct() {
           </div>
         </section>
 
-        {/* 상세 에디터 섹션 */}
+        {/* 특장점(Features) 섹션 */}
         <section style={{ backgroundColor: "#fff", padding: "2rem", borderRadius: "12px", border: "1px solid #eee" }}>
-          <label style={{ display: "block", marginBottom: "1.5rem", fontWeight: "700", color: "#333" }}>상세 설명 및 기술 사양</label>
-          <div style={{ height: "500px", marginBottom: "3rem" }}>
-            <ReactQuill 
-              theme="snow" 
-              value={content} 
-              onChange={setContent} 
-              style={{ height: "100%" }}
-              placeholder="제품의 상세 특징, 기술 사양, 아키텍처 등을 자유롭게 작성하세요."
-            />
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1.5rem" }}>
+            <label style={{ fontWeight: "700", color: "#333", margin: 0 }}>특장점 (Features)</label>
+            <button 
+              type="button" 
+              onClick={addFeature}
+              style={{ padding: "0.5rem 1rem", backgroundColor: "#004a99", color: "#fff", border: "none", borderRadius: "6px", fontSize: "0.9rem", cursor: "pointer", fontWeight: "bold" }}
+            >
+              + 특장점 추가하기
+            </button>
           </div>
+          
+          {features.length === 0 ? (
+            <div style={{ textAlign: "center", padding: "2rem", backgroundColor: "#f9f9f9", borderRadius: "8px", color: "#999" }}>
+              등록된 특장점이 없습니다. 우측 상단의 버튼을 눌러 추가하세요.
+            </div>
+          ) : (
+            <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+              {features.map((feature, index) => (
+                <div key={feature.id} style={{ display: "flex", gap: "1.5rem", padding: "1.5rem", backgroundColor: "#fcfcfc", border: "1px solid #e0e0e0", borderRadius: "8px", position: "relative" }}>
+                  <button 
+                    type="button"
+                    onClick={() => removeFeature(feature.id)}
+                    style={{ position: "absolute", top: "1rem", right: "1rem", background: "none", border: "none", color: "#ff4d4f", cursor: "pointer", fontSize: "1.2rem" }}
+                    title="삭제"
+                  >
+                    ×
+                  </button>
+                  
+                  {/* 아이콘 */}
+                  <div style={{ width: "100px", flexShrink: 0 }}>
+                    <div style={{ width: "80px", height: "80px", backgroundColor: "#fff", border: "1px solid #ddd", borderRadius: "8px", marginBottom: "0.5rem", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }}>
+                      {feature.preview ? (
+                        <img src={feature.preview} alt="Icon Preview" style={{ width: "100%", height: "100%", objectFit: "contain" }} />
+                      ) : (
+                        <span style={{ fontSize: "0.8rem", color: "#aaa" }}>아이콘</span>
+                      )}
+                    </div>
+                    <input 
+                      type="file" 
+                      accept="image/*"
+                      onChange={(e) => handleFeatureChange(feature.id, "file", e.target.files?.[0])}
+                      style={{ fontSize: "0.7rem", width: "100%" }}
+                    />
+                  </div>
+                  
+                  {/* 내용 */}
+                  <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: "0.8rem" }}>
+                    <input 
+                      type="text" 
+                      value={feature.title}
+                      onChange={(e) => handleFeatureChange(feature.id, "title", e.target.value)}
+                      placeholder={`특장점 ${index + 1} 제목`}
+                      style={{ padding: "0.6rem", border: "1px solid #ddd", borderRadius: "6px", fontWeight: "bold" }}
+                      required
+                    />
+                    <textarea 
+                      value={feature.description}
+                      onChange={(e) => handleFeatureChange(feature.id, "description", e.target.value)}
+                      placeholder="설명을 입력하세요."
+                      style={{ padding: "0.6rem", border: "1px solid #ddd", borderRadius: "6px", minHeight: "60px", resize: "vertical" }}
+                      required
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </section>
+
+        {/* 제품사양(Specifications) 섹션 */}
+        <section style={{ backgroundColor: "#fff", padding: "2rem", borderRadius: "12px", border: "1px solid #eee" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1.5rem" }}>
+            <label style={{ fontWeight: "700", color: "#333", margin: 0 }}>제품 사양 (Specifications)</label>
+            <button 
+              type="button" 
+              onClick={addSpecification}
+              style={{ padding: "0.5rem 1rem", backgroundColor: "#000", color: "#fff", border: "none", borderRadius: "6px", fontSize: "0.9rem", cursor: "pointer", fontWeight: "bold" }}
+            >
+              + 사양 추가하기
+            </button>
+          </div>
+          
+          {specifications.length === 0 ? (
+            <div style={{ textAlign: "center", padding: "2rem", backgroundColor: "#f9f9f9", borderRadius: "8px", color: "#999" }}>
+              등록된 사양이 없습니다.
+            </div>
+          ) : (
+            <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+              {specifications.map((spec, index) => (
+                <div key={spec.id} style={{ display: "flex", gap: "1rem", alignItems: "center" }}>
+                  <input 
+                    type="text" 
+                    value={spec.label}
+                    onChange={(e) => handleSpecificationChange(spec.id, "label", e.target.value)}
+                    placeholder="항목 (예: 크기, 무게)"
+                    style={{ flex: 1, padding: "0.8rem", border: "1px solid #ddd", borderRadius: "6px" }}
+                    required
+                  />
+                  <input 
+                    type="text" 
+                    value={spec.value}
+                    onChange={(e) => handleSpecificationChange(spec.id, "value", e.target.value)}
+                    placeholder="값 (예: 114 x 132 mm)"
+                    style={{ flex: 2, padding: "0.8rem", border: "1px solid #ddd", borderRadius: "6px" }}
+                    required
+                  />
+                  <button 
+                    type="button"
+                    onClick={() => removeSpecification(spec.id)}
+                    style={{ padding: "0.8rem 1rem", backgroundColor: "#ff4d4f", color: "#fff", border: "none", borderRadius: "6px", cursor: "pointer", fontWeight: "bold" }}
+                  >
+                    삭제
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+        </section>
+
+
 
         <div style={{ display: "flex", gap: "1rem", justifyContent: "flex-end" }}>
           <button 

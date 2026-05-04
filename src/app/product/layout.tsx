@@ -14,7 +14,7 @@ export default function ProductLayout({ children }: { children: React.ReactNode 
         .from("categories")
         .select("id, name")
         .eq("type", "product")
-        .order("name", { ascending: true });
+        .order("created_at", { ascending: false });
 
       if (error) {
         console.error("Error fetching product categories:", error);

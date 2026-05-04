@@ -91,7 +91,7 @@ export default function InquiryPage() {
 
   return (
     <div className="container mt-2 mb-8">
-      <h2 className="mb-2 text-center" style={{ fontSize: '2.2rem', fontWeight: '800' }}>서비스 문의</h2>
+      <h2 className="mb-2 text-center" style={{ fontSize: '2.2rem', fontWeight: '800' }}>제품 및 서비스 문의</h2>
       <p className="text-center mb-4" style={{ color: '#666' }}>
         궁금하신 점을 남겨주시면 정성을 다해 답변해 드리겠습니다.
       </p>

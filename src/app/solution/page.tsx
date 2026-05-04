@@ -92,9 +92,9 @@ export default function SolutionPage({ searchParams }: { searchParams: Promise<{
                 display: 'flex',
                 flexDirection: 'column'
               }}>
-                <div style={{ width: '100%', height: '200px', backgroundColor: '#eee', overflow: 'hidden' }}>
+                <div style={{ width: '100%', height: '200px', backgroundColor: '#fff', overflow: 'hidden' }}>
                   {sol.image_url ? (
-                    <img src={sol.image_url} alt={sol.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    <img src={sol.image_url} alt={sol.title} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
                   ) : (
                     <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#999', backgroundColor: '#f0f0f0' }}>이미지 없음</div>
                   )}

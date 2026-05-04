@@ -10,6 +10,7 @@ interface Product {
   category_id: string;
   is_active: boolean;
   created_at: string;
+  manufacturer: string | null;
   categories?: { name: string; type: string };
 }
 
@@ -28,6 +29,7 @@ export default function ProductManagement() {
         category_id, 
         is_active, 
         created_at,
+        manufacturer,
         categories (name, type)
       `)
       .order("created_at", { ascending: false });
@@ -89,7 +91,7 @@ export default function ProductManagement() {
           <h2 style={{ fontSize: "1.8rem", fontWeight: "800" }}>제품 및 솔루션 관리</h2>
           <p style={{ color: "#666", marginTop: "0.5rem" }}>웹사이트에 표시될 제품과 솔루션을 관리합니다.</p>
         </div>
-        <Link 
+        <Link
           href="/admin/products/create"
           style={{ padding: "0.8rem 1.5rem", backgroundColor: "#000", color: "#fff", textDecoration: "none", borderRadius: "8px", fontWeight: "bold" }}
         >
@@ -114,7 +116,7 @@ export default function ProductManagement() {
                 <th style={{ padding: "1rem 0.5rem" }}>상태</th>
                 <th style={{ padding: "1rem 0.5rem" }}>분류</th>
                 <th style={{ padding: "1rem 0.5rem" }}>제품/솔루션명</th>
-                <th style={{ padding: "1rem 0.5rem" }}>등록일</th>
+                <th style={{ padding: "1rem 0.5rem" }}>제조사</th>
                 <th style={{ padding: "1rem 0.5rem", textAlign: "right" }}>관리</th>
               </tr>
             </thead>
@@ -122,11 +124,11 @@ export default function ProductManagement() {
               {products.map((item) => (
                 <tr key={item.id} style={{ borderBottom: "1px solid #f5f5f5" }}>
                   <td style={{ padding: "1rem 0.5rem" }}>
-                    <button 
+                    <button
                       onClick={() => handleToggleActive(item.id, item.is_active)}
-                      style={{ 
-                        padding: "0.4rem 0.8rem", 
-                        borderRadius: "20px", 
+                      style={{
+                        padding: "0.4rem 0.8rem",
+                        borderRadius: "20px",
                         border: "none",
                         fontSize: "0.8rem",
                         fontWeight: "bold",
@@ -141,7 +143,7 @@ export default function ProductManagement() {
                   <td style={{ padding: "1rem 0.5rem" }}>
                     {item.categories ? (
                       <span style={{ color: "#666", fontSize: "0.9rem" }}>
-                        {item.categories.type === "solution" ? "[솔루션] " : "[제품] "} 
+                        {item.categories.type === "solution" ? "[솔루션] " : "[제품] "}
                         {item.categories.name}
                       </span>
                     ) : (
@@ -150,11 +152,11 @@ export default function ProductManagement() {
                   </td>
                   <td style={{ padding: "1rem 0.5rem", fontWeight: "bold" }}>{item.title}</td>
                   <td style={{ padding: "1rem 0.5rem", color: "#666", fontSize: "0.9rem" }}>
-                    {new Date(item.created_at).toLocaleDateString()}
+                    {item.manufacturer || "-"}
                   </td>
                   <td style={{ padding: "1rem 0.5rem", textAlign: "right" }}>
                     <div style={{ display: "flex", gap: "0.5rem", justifyContent: "flex-end" }}>
-                      <Link 
+                      <Link
                         href={`/admin/products/${item.id}`}
                         style={{ padding: "0.4rem 0.8rem", backgroundColor: "#f5f5f5", color: "#333", textDecoration: "none", border: "1px solid #ddd", borderRadius: "6px", fontSize: "0.9rem" }}
                       >

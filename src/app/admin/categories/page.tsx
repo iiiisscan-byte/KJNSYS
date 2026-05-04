@@ -87,6 +87,39 @@ export default function CategoryManagement() {
     }
   };
 
+  const handleMove = async (index: number, direction: 'up' | 'down') => {
+    if (
+      (direction === 'up' && index === 0) ||
+      (direction === 'down' && index === categories.length - 1)
+    ) return;
+
+    const targetIndex = direction === 'up' ? index - 1 : index + 1;
+    const currentItem = categories[index];
+    const targetItem = categories[targetIndex];
+
+    try {
+      // Swap created_at values to change the order
+      const { error: error1 } = await supabase
+        .from("categories")
+        .update({ created_at: targetItem.created_at })
+        .eq("id", currentItem.id);
+
+      const { error: error2 } = await supabase
+        .from("categories")
+        .update({ created_at: currentItem.created_at })
+        .eq("id", targetItem.id);
+
+      if (error1 || error2) {
+        console.error("Error moving category:", error1 || error2);
+        alert("순서 변경에 실패했습니다.");
+      } else {
+        fetchCategories();
+      }
+    } catch (err: any) {
+      alert(`시스템 에러: ${err.message}`);
+    }
+  };
+
   return (
     <div>
       <div style={{ marginBottom: "2rem" }}>
@@ -152,14 +185,49 @@ export default function CategoryManagement() {
             <table style={{ width: "100%", borderCollapse: "collapse" }}>
               <thead>
                 <tr style={{ borderBottom: "2px solid #eee", textAlign: "left" }}>
+                  <th style={{ padding: "1rem 0.5rem" }}>순서</th>
                   <th style={{ padding: "1rem 0.5rem" }}>타입</th>
                   <th style={{ padding: "1rem 0.5rem" }}>이름</th>
                   <th style={{ padding: "1rem 0.5rem", textAlign: "right" }}>관리</th>
                 </tr>
               </thead>
               <tbody>
-                {categories.map((cat) => (
+                {categories.map((cat, index) => (
                   <tr key={cat.id} style={{ borderBottom: "1px solid #f5f5f5" }}>
+                    <td style={{ padding: "1rem 0.5rem" }}>
+                      <div style={{ display: "flex", gap: "0.2rem" }}>
+                        <button
+                          onClick={() => handleMove(index, 'up')}
+                          disabled={index === 0}
+                          style={{
+                            padding: "0.2rem 0.4rem",
+                            cursor: index === 0 ? "not-allowed" : "pointer",
+                            opacity: index === 0 ? 0.3 : 1,
+                            backgroundColor: "#f0f0f0",
+                            border: "none",
+                            borderRadius: "4px"
+                          }}
+                          title="위로 이동"
+                        >
+                          ▲
+                        </button>
+                        <button
+                          onClick={() => handleMove(index, 'down')}
+                          disabled={index === categories.length - 1}
+                          style={{
+                            padding: "0.2rem 0.4rem",
+                            cursor: index === categories.length - 1 ? "not-allowed" : "pointer",
+                            opacity: index === categories.length - 1 ? 0.3 : 1,
+                            backgroundColor: "#f0f0f0",
+                            border: "none",
+                            borderRadius: "4px"
+                          }}
+                          title="아래로 이동"
+                        >
+                          ▼
+                        </button>
+                      </div>
+                    </td>
                     <td style={{ padding: "1rem 0.5rem" }}>
                       <span style={{ 
                         padding: "0.2rem 0.6rem", 

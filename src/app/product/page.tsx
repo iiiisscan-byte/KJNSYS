@@ -82,7 +82,7 @@ export default function ProductPage({ searchParams }: { searchParams: Promise<{ 
                 transition: 'transform 0.2s ease, box-shadow 0.2s ease',
                 height: '100%'
               }}>
-                <div style={{ width: '100%', height: '240px', backgroundColor: '#f9f9f9', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
+                <div style={{ width: '100%', height: '240px', backgroundColor: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
                   {product.image_url ? (
                     <img src={product.image_url} alt={product.title} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
                   ) : (

@@ -10,9 +10,10 @@ interface Solution {
   id: string;
   title: string;
   description: string | null;
-  content: string | null;
   image_url: string | null;
   category_id: string;
+  features: any[] | null;
+  specifications: any[] | null;
   created_at: string;
   categories: { name: string };
 }
@@ -29,7 +30,7 @@ export default function SolutionDetailPage({ params }: { params: Promise<{ id: s
       const { data, error } = await supabase
         .from("products")
         .select(`
-          id, title, description, content, image_url, category_id, created_at,
+          id, title, description, image_url, category_id, features, specifications, created_at,
           categories (name)
         `)
         .eq("id", id)
@@ -75,37 +76,17 @@ export default function SolutionDetailPage({ params }: { params: Promise<{ id: s
       <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '4rem', marginBottom: '4rem', alignItems: 'center' }}>
         {/* 솔루션 정보 */}
         <div style={{ display: 'flex', flexDirection: 'column' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.5rem' }}>
-            <span style={{ 
-              backgroundColor: '#e3f2fd', 
-              color: '#004a99', 
-              padding: '0.4rem 1rem', 
-              borderRadius: '20px', 
-              fontSize: '0.9rem',
-              fontWeight: '700',
-              border: '1px solid #bbdefb'
-            }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
+            <span style={{ color: '#004a99', fontSize: '1rem', fontWeight: '800' }}>
               {solution.categories.name}
             </span>
           </div>
-          <h1 style={{ fontSize: '3.2rem', fontWeight: '900', color: '#1a1a1a', marginBottom: '2rem', lineHeight: '1.2', letterSpacing: '-0.02em' }}>
+          <h1 style={{ fontSize: '2.5rem', fontWeight: '900', color: '#1a1a1a', marginBottom: '1.5rem', lineHeight: '1.3', letterSpacing: '-0.02em' }}>
             {solution.title}
           </h1>
-          <p style={{ fontSize: '1.25rem', color: '#444', lineHeight: '1.7', marginBottom: '3rem', wordBreak: 'keep-all' }}>
-            {solution.description || "본 솔루션에 대한 핵심 소개가 등록되지 않았습니다."}
-          </p>
           
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1.5rem', marginBottom: '3rem' }}>
-            <div style={{ flex: '1', minWidth: '150px', padding: '1.5rem', backgroundColor: '#f8f9fa', borderRadius: '12px' }}>
-              <div style={{ color: '#004a99', marginBottom: '0.5rem' }}><FiGrid size={24} /></div>
-              <div style={{ fontWeight: '700', fontSize: '1.1rem' }}>최적화 시스템</div>
-              <div style={{ color: '#666', fontSize: '0.85rem', marginTop: '0.3rem' }}>맞춤형 프로세스 제공</div>
-            </div>
-            <div style={{ flex: '1', minWidth: '150px', padding: '1.5rem', backgroundColor: '#f8f9fa', borderRadius: '12px' }}>
-              <div style={{ color: '#004a99', marginBottom: '0.5rem' }}><FiActivity size={24} /></div>
-              <div style={{ fontWeight: '700', fontSize: '1.1rem' }}>고성능 보장</div>
-              <div style={{ color: '#666', fontSize: '0.85rem', marginTop: '0.3rem' }}>검증된 비즈니스 성능</div>
-            </div>
+          <div style={{ fontSize: '1.1rem', color: '#555', lineHeight: '1.8', wordBreak: 'break-word', whiteSpace: 'pre-line', marginBottom: '3rem' }}>
+            {solution.description || "본 솔루션에 대한 소개가 등록되지 않았습니다."}
           </div>
           
           <div>
@@ -144,42 +125,80 @@ export default function SolutionDetailPage({ params }: { params: Promise<{ id: s
         </div>
       </div>
 
-      {/* 상세 내용 (에디터 출력물) */}
-      <div style={{ backgroundColor: '#fff', padding: '5rem 0', borderTop: '1px solid #eee' }}>
-        <div style={{ maxWidth: '900px', margin: '0 auto' }}>
-          <h3 style={{ fontSize: '2rem', fontWeight: '800', marginBottom: '4rem', textAlign: 'center', color: '#004a99' }}>솔루션 상세 아키텍처 및 특징</h3>
-          <div 
-            className="rich-content"
-            dangerouslySetInnerHTML={{ __html: solution.content || '<p style="text-align:center; color:#999;">상세 내용이 등록되지 않았습니다.</p>' }}
-            style={{ minHeight: '400px', lineHeight: '1.7', fontSize: '1.1rem' }}
-          />
+      {/* 특장점 (Features) */}
+      {solution.features && solution.features.length > 0 && (
+        <div style={{ marginTop: '5rem', marginBottom: '4rem' }}>
+          <h3 style={{ fontSize: '2rem', fontWeight: '800', textAlign: 'center', marginBottom: '3rem', color: '#004a99' }}>솔루션 특장점</h3>
+          <div style={{ 
+            display: 'grid', 
+            gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', 
+            gap: '3rem' 
+          }}>
+            {solution.features.map((feature: any, idx: number) => (
+              <div key={idx} style={{ display: 'flex', flexDirection: 'column', gap: '1.2rem', padding: '2rem', backgroundColor: '#fff', borderRadius: '16px', boxShadow: '0 4px 20px rgba(0,0,0,0.03)' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                  {feature.icon_url && (
+                    <div style={{ 
+                      width: '60px', 
+                      height: '60px', 
+                      flexShrink: 0,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center'
+                    }}>
+                      <img src={feature.icon_url} alt={feature.title} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+                    </div>
+                  )}
+                  <h4 style={{ fontSize: '1.4rem', fontWeight: '800', color: '#1a1a1a', margin: 0 }}>
+                    {feature.title}
+                  </h4>
+                </div>
+                <p style={{ fontSize: '1.05rem', color: '#555', lineHeight: '1.7', wordBreak: 'keep-all', margin: 0 }}>
+                  {feature.description}
+                </p>
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
 
-      <style jsx global>{`
-        .rich-content img {
-          max-width: 100%;
-          height: auto;
-          border-radius: 12px;
-          margin: 2rem 0;
-          box-shadow: 0 10px 20px rgba(0,0,0,0.05);
-        }
-        .rich-content h1, .rich-content h2, .rich-content h3 {
-          margin-top: 3rem;
-          margin-bottom: 1.5rem;
-          color: #1a1a1a;
-        }
-        .rich-content p {
-          margin-bottom: 1.5rem;
-        }
-        .rich-content ul, .rich-content ol {
-          margin-bottom: 1.5rem;
-          padding-left: 1.5rem;
-        }
-        .rich-content li {
-          margin-bottom: 0.5rem;
-        }
-      `}</style>
+      {/* 제품 사양 (Specifications) */}
+      {solution.specifications && solution.specifications.length > 0 && (
+        <div style={{ marginTop: '5rem', marginBottom: '5rem' }}>
+          <h3 style={{ fontSize: '2rem', fontWeight: '800', textAlign: 'center', marginBottom: '3rem', color: '#004a99' }}>사양 및 요구사항</h3>
+          <div style={{ maxWidth: '800px', margin: '0 auto', borderTop: '2px solid #004a99' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', backgroundColor: '#fff' }}>
+              <tbody>
+                {solution.specifications.map((spec: any, idx: number) => (
+                  <tr key={idx} style={{ borderBottom: '1px solid #eee' }}>
+                    <th style={{ 
+                      width: '30%', 
+                      padding: '1.5rem', 
+                      backgroundColor: '#f4f9ff', 
+                      textAlign: 'left',
+                      fontWeight: '700',
+                      color: '#004a99',
+                      fontSize: '1.05rem'
+                    }}>
+                      {spec.label}
+                    </th>
+                    <td style={{ 
+                      padding: '1.5rem', 
+                      color: '#444',
+                      fontSize: '1.05rem',
+                      lineHeight: '1.5'
+                    }}>
+                      {spec.value}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+
+
     </div>
   );
 }

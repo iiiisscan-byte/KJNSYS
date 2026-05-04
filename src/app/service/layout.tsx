@@ -3,7 +3,7 @@ import { FiHeadphones } from "react-icons/fi";
 
 const serviceNav = [
   { label: "고객센터 안내", href: "/service" },
-  { label: "서비스 문의", href: "/service/inquiry" },
+  { label: "제품 및 서비스 문의", href: "/service/inquiry" },
   { label: "자료실", href: "/service/archive" },
 ];
 
