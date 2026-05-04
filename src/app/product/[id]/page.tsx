@@ -53,8 +53,11 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
   if (!product) return null;
 
   return (
-    <div className="container mt-8 mb-8">
-      {/* 상단 네비게이션 */}
+    <div style={{ width: '100%' }}>
+      {/* 제품소개 섹션 */}
+      <div style={{ backgroundColor: '#ffffff', paddingTop: '3rem', paddingBottom: '5rem' }}>
+        <div className="container">
+          {/* 상단 네비게이션 */}
       <div style={{ marginBottom: '2rem' }}>
         <button 
           onClick={() => router.back()} 
@@ -126,12 +129,15 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
             </Link>
           </div>
         </div>
+        </div>
+      </div>
       </div>
 
       {/* 특장점 (Features) */}
       {product.features && product.features.length > 0 && (
-        <div style={{ marginTop: '5rem', marginBottom: '4rem' }}>
-          <h3 style={{ fontSize: '2rem', fontWeight: '800', textAlign: 'center', marginBottom: '3rem', color: '#1a1a1a' }}>특장점</h3>
+        <div style={{ backgroundColor: '#f8f9fa', padding: '5rem 0' }}>
+          <div className="container">
+            <h3 style={{ fontSize: '2rem', fontWeight: '800', textAlign: 'center', marginBottom: '3rem', color: '#1a1a1a' }}>특장점</h3>
           <div style={{ 
             display: 'grid', 
             gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', 
@@ -162,13 +168,15 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
               </div>
             ))}
           </div>
+          </div>
         </div>
       )}
 
       {/* 제품 사양 (Specifications) */}
       {product.specifications && product.specifications.length > 0 && (
-        <div style={{ marginTop: '5rem', marginBottom: '5rem' }}>
-          <h3 style={{ fontSize: '2rem', fontWeight: '800', textAlign: 'center', marginBottom: '3rem', color: '#1a1a1a' }}>제품 사양</h3>
+        <div style={{ backgroundColor: '#ffffff', padding: '5rem 0', borderTop: '1px solid #eee' }}>
+          <div className="container">
+            <h3 style={{ fontSize: '2rem', fontWeight: '800', textAlign: 'center', marginBottom: '3rem', color: '#1a1a1a' }}>제품 사양</h3>
           <div style={{ maxWidth: '800px', margin: '0 auto', borderTop: '2px solid #1a1a1a' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
               <tbody>
@@ -198,9 +206,9 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
               </tbody>
             </table>
           </div>
+          </div>
         </div>
       )}
-
 
     </div>
   );
