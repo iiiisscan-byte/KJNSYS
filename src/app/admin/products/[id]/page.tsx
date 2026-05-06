@@ -22,7 +22,7 @@ export default function EditProduct({ params }: { params: Promise<{ id: string }
   const [imagePreview, setImagePreview] = useState<string | null>(null);
 
   // Features State
-  const [features, setFeatures] = useState<{ id: string; title: string; description: string; icon_url: string | null; file: File | null; preview: string | null }[]>([]);
+  const [features, setFeatures] = useState<{ id: string; title: string; description: string; icon_url: string | null; file: File | null; preview: string | null; image_url: string | null; image_file: File | null; image_preview: string | null }[]>([]);
   
   // Specifications State
   const [specifications, setSpecifications] = useState<{ id: string; label: string; value: string }[]>([]);
@@ -57,7 +57,10 @@ export default function EditProduct({ params }: { params: Promise<{ id: string }
             description: f.description || "",
             icon_url: f.icon_url || null,
             file: null,
-            preview: f.icon_url || null
+            preview: f.icon_url || null,
+            image_url: f.image_url || null,
+            image_file: null,
+            image_preview: f.image_url || null
           })));
         }
 
@@ -101,7 +104,7 @@ export default function EditProduct({ params }: { params: Promise<{ id: string }
   };
 
   const addFeature = () => {
-    setFeatures([...features, { id: Math.random().toString(), title: "", description: "", icon_url: null, file: null, preview: null }]);
+    setFeatures([...features, { id: Math.random().toString(), title: "", description: "", icon_url: null, file: null, preview: null, image_url: null, image_file: null, image_preview: null }]);
   };
 
   const removeFeature = (id: string) => {
@@ -113,6 +116,9 @@ export default function EditProduct({ params }: { params: Promise<{ id: string }
       if (f.id === id) {
         if (field === "file" && value) {
           return { ...f, file: value, preview: URL.createObjectURL(value) };
+        }
+        if (field === "image_file" && value) {
+          return { ...f, image_file: value, image_preview: URL.createObjectURL(value) };
         }
         return { ...f, [field]: value };
       }
@@ -146,11 +152,11 @@ export default function EditProduct({ params }: { params: Promise<{ id: string }
 
       // 특장점 이미지 업로드 처리
       const processedFeatures = await Promise.all(features.map(async (f) => {
-        let iconUrl = f.icon_url;
-        if (f.file) {
-          iconUrl = await uploadImage(f.file);
+        let imageUrl = f.image_url;
+        if (f.image_file) {
+          imageUrl = await uploadImage(f.image_file);
         }
-        return { title: f.title, description: f.description, icon_url: iconUrl };
+        return { title: f.title, description: f.description, image_url: imageUrl };
       }));
 
       // 제품사양 처리
@@ -312,24 +318,6 @@ export default function EditProduct({ params }: { params: Promise<{ id: string }
                     ×
                   </button>
                   
-                  {/* 아이콘 */}
-                  <div style={{ width: "100px", flexShrink: 0 }}>
-                    <div style={{ width: "80px", height: "80px", backgroundColor: "#fff", border: "1px solid #ddd", borderRadius: "8px", marginBottom: "0.5rem", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }}>
-                      {feature.preview ? (
-                        <img src={feature.preview} alt="Icon Preview" style={{ width: "100%", height: "100%", objectFit: "contain" }} />
-                      ) : (
-                        <span style={{ fontSize: "0.8rem", color: "#aaa" }}>아이콘</span>
-                      )}
-                    </div>
-                    <input 
-                      type="file" 
-                      accept="image/*"
-                      onChange={(e) => handleFeatureChange(feature.id, "file", e.target.files?.[0])}
-                      style={{ fontSize: "0.7rem", width: "100%" }}
-                    />
-                  </div>
-                  
-                  {/* 내용 */}
                   <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: "0.8rem" }}>
                     <input 
                       type="text" 
@@ -346,6 +334,26 @@ export default function EditProduct({ params }: { params: Promise<{ id: string }
                       style={{ padding: "0.6rem", border: "1px solid #ddd", borderRadius: "6px", minHeight: "60px", resize: "vertical" }}
                       required
                     />
+                    
+                    {/* 상세 이미지 추가 */}
+                    <div style={{ marginTop: "0.5rem" }}>
+                      <label style={{ display: "block", fontSize: "0.85rem", fontWeight: "bold", marginBottom: "0.5rem", color: "#555" }}>특장점 상세 이미지 (옵션)</label>
+                      <div style={{ display: "flex", gap: "1rem", alignItems: "flex-start" }}>
+                        <div style={{ width: "120px", height: "80px", backgroundColor: "#fff", border: "1px dashed #ccc", borderRadius: "6px", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }}>
+                          {feature.image_preview ? (
+                            <img src={feature.image_preview} alt="Image Preview" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                          ) : (
+                            <span style={{ fontSize: "0.75rem", color: "#aaa" }}>이미지 없음</span>
+                          )}
+                        </div>
+                        <input 
+                          type="file" 
+                          accept="image/*"
+                          onChange={(e) => handleFeatureChange(feature.id, "image_file", e.target.files?.[0])}
+                          style={{ fontSize: "0.8rem", marginTop: "0.5rem" }}
+                        />
+                      </div>
+                    </div>
                   </div>
                 </div>
               ))}

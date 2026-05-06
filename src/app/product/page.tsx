@@ -22,33 +22,59 @@ export default function ProductPage({ searchParams }: { searchParams: Promise<{ 
     async function loadProducts() {
       setLoading(true);
       
-      let query = supabase
-        .from("products")
-        .select("id, title, description, image_url, category_id")
-        .eq("is_active", true);
+      try {
+        let finalQuery;
 
-      if (category) {
-        query = query.eq("category_id", category);
-        
-        // 카테고리 이름 가져오기
-        const { data: catData } = await supabase
-          .from("categories")
-          .select("name")
-          .eq("id", category)
-          .single();
-        if (catData) setCategoryName(catData.name);
-      } else {
-        setCategoryName("전체 제품");
+        if (category) {
+          // 특정 카테고리가 선택된 경우
+          finalQuery = supabase
+            .from("products")
+            .select("id, title, description, image_url, category_id")
+            .eq("is_active", true)
+            .eq("category_id", category);
+          
+          const { data: catData } = await supabase
+            .from("categories")
+            .select("name")
+            .eq("id", category)
+            .single();
+          if (catData) setCategoryName(catData.name);
+        } else {
+          // 전체 제품 보기: 'product' 타입 카테고리 ID들을 먼저 가져옴
+          const { data: prodCats } = await supabase
+            .from("categories")
+            .select("id")
+            .eq("type", "product");
+          
+          if (prodCats && prodCats.length > 0) {
+            const catIds = prodCats.map(c => c.id);
+            finalQuery = supabase
+              .from("products")
+              .select("id, title, description, image_url, category_id")
+              .eq("is_active", true)
+              .in("category_id", catIds);
+          } else {
+            // 제품 카테고리가 없는 경우 쿼리를 수행하지 않고 빈 배열 설정
+            setProducts([]);
+            setCategoryName("전체 제품");
+            setLoading(false);
+            return;
+          }
+          setCategoryName("전체 제품");
+        }
+
+        const { data, error } = await finalQuery.order("created_at", { ascending: false });
+
+        if (error) {
+          console.error("Error loading products:", error.message || JSON.stringify(error));
+        } else {
+          setProducts(data || []);
+        }
+      } catch (err: any) {
+        console.error("Unhandled error in loadProducts:", err);
+      } finally {
+        setLoading(false);
       }
-
-      const { data, error } = await query.order("created_at", { ascending: false });
-
-      if (error) {
-        console.error("Error loading products:", error);
-      } else {
-        setProducts(data || []);
-      }
-      setLoading(false);
     }
     loadProducts();
   }, [category]);

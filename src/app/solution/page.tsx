@@ -22,41 +22,59 @@ export default function SolutionPage({ searchParams }: { searchParams: Promise<{
     async function loadSolutions() {
       setLoading(true);
       
-      let query = supabase
-        .from("products") // 솔루션도 products 테이블을 같이 사용함 (카테고리로 구분)
-        .select("id, title, description, image_url, category_id")
-        .eq("is_active", true);
-
-      // 솔루션 타입인 카테고리만 가져오도록 추가 필터링이 필요할 수 있음
-      // 현재는 카테고리 ID가 전달되므로 해당 카테고리의 아이템만 가져옴
-
-      if (category) {
-        query = query.eq("category_id", category);
+      try {
+        let finalQuery;
         
-        const { data: catData } = await supabase
-          .from("categories")
-          .select("name")
-          .eq("id", category)
-          .single();
-        if (catData) setCategoryName(catData.name);
-      } else {
-        // 카테고리가 없을 때는 모든 'solution' 타입 카테고리에 속한 제품들을 가져와야 함
-        const { data: solCats } = await supabase.from("categories").select("id").eq("type", "solution");
-        if (solCats && solCats.length > 0) {
-          const catIds = solCats.map(c => c.id);
-          query = query.in("category_id", catIds);
+        if (category) {
+          // 특정 카테고리가 선택된 경우
+          finalQuery = supabase
+            .from("products")
+            .select("id, title, description, image_url, category_id")
+            .eq("is_active", true)
+            .eq("category_id", category);
+          
+          const { data: catData } = await supabase
+            .from("categories")
+            .select("name")
+            .eq("id", category)
+            .single();
+          if (catData) setCategoryName(catData.name);
+        } else {
+          // 전체 솔루션 보기: 'solution' 타입 카테고리 ID들을 먼저 가져옴
+          const { data: solCats } = await supabase
+            .from("categories")
+            .select("id")
+            .eq("type", "solution");
+          
+          if (solCats && solCats.length > 0) {
+            const catIds = solCats.map(c => c.id);
+            finalQuery = supabase
+              .from("products")
+              .select("id, title, description, image_url, category_id")
+              .eq("is_active", true)
+              .in("category_id", catIds);
+          } else {
+            // 솔루션 카테고리가 없는 경우 쿼리를 수행하지 않고 빈 배열 설정
+            setSolutions([]);
+            setCategoryName("전체 솔루션");
+            setLoading(false);
+            return;
+          }
+          setCategoryName("전체 솔루션");
         }
-        setCategoryName("전체 솔루션");
-      }
 
-      const { data, error } = await query.order("created_at", { ascending: false });
+        const { data, error } = await finalQuery.order("created_at", { ascending: false });
 
-      if (error) {
-        console.error("Error loading solutions:", error);
-      } else {
-        setSolutions(data || []);
+        if (error) {
+          console.error("Error loading solutions:", error.message || JSON.stringify(error));
+        } else {
+          setSolutions(data || []);
+        }
+      } catch (err: any) {
+        console.error("Unhandled error in loadSolutions:", err);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     }
     loadSolutions();
   }, [category]);

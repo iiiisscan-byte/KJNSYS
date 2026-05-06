@@ -137,31 +137,26 @@ export default function SolutionDetailPage({ params }: { params: Promise<{ id: s
             <h3 style={{ fontSize: '2rem', fontWeight: '800', textAlign: 'center', marginBottom: '3rem', color: '#004a99' }}>솔루션 특장점</h3>
           <div style={{ 
             display: 'grid', 
-            gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', 
+            gridTemplateColumns: '1fr', 
             gap: '3rem' 
           }}>
             {solution.features.map((feature: any, idx: number) => (
-              <div key={idx} style={{ display: 'flex', flexDirection: 'column', gap: '1.2rem', padding: '2rem', backgroundColor: '#fff', borderRadius: '16px', boxShadow: '0 4px 20px rgba(0,0,0,0.03)' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                  {feature.icon_url && (
-                    <div style={{ 
-                      width: '60px', 
-                      height: '60px', 
-                      flexShrink: 0,
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center'
-                    }}>
-                      <img src={feature.icon_url} alt={feature.title} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
-                    </div>
-                  )}
-                  <h4 style={{ fontSize: '1.4rem', fontWeight: '800', color: '#1a1a1a', margin: 0 }}>
-                    {feature.title}
-                  </h4>
+              <div key={idx} style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '3rem', padding: '2.5rem', backgroundColor: '#fff', borderRadius: '16px', boxShadow: '0 4px 20px rgba(0,0,0,0.03)' }}>
+                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '1.2rem' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                    <h4 style={{ fontSize: '1.4rem', fontWeight: '800', color: '#1a1a1a', margin: 0 }}>
+                      {feature.title}
+                    </h4>
+                  </div>
+                  <p style={{ fontSize: '1.05rem', color: '#555', lineHeight: '1.7', wordBreak: 'keep-all', margin: 0 }}>
+                    {feature.description}
+                  </p>
                 </div>
-                <p style={{ fontSize: '1.05rem', color: '#555', lineHeight: '1.7', wordBreak: 'keep-all', margin: 0 }}>
-                  {feature.description}
-                </p>
+                {feature.image_url && (
+                  <div style={{ width: '45%', flexShrink: 0, backgroundColor: 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <img src={feature.image_url} alt={`${feature.title} 상세 이미지`} style={{ maxWidth: '100%', maxHeight: '300px', objectFit: 'contain', borderRadius: '12px', mixBlendMode: 'multiply' }} />
+                  </div>
+                )}
               </div>
             ))}
           </div>
@@ -202,6 +197,9 @@ export default function SolutionDetailPage({ params }: { params: Promise<{ id: s
                 ))}
               </tbody>
             </table>
+            <p style={{ marginTop: '1.5rem', fontSize: '0.9rem', color: '#888', textAlign: 'right' }}>
+              * 상기 설명된 제품사양은 예고없이 변경될 수 있습니다.
+            </p>
           </div>
           </div>
         </div>
