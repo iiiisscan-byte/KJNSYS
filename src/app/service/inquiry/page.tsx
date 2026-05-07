@@ -10,7 +10,7 @@ export default function InquiryPage() {
     email: "",
     phone: "",
     company: "",
-    category: "제품 구매",
+    category: "제품 문의",
     title: "",
     message: "",
   });
@@ -50,7 +50,7 @@ export default function InquiryPage() {
         email: "",
         phone: "",
         company: "",
-        category: "제품 구매",
+        category: "제품 문의",
         title: "",
         message: "",
       });
@@ -150,7 +150,8 @@ export default function InquiryPage() {
         <div className={styles.formGroup}>
           <label htmlFor="category">문의 유형</label>
           <select id="category" name="category" value={formData.category} onChange={handleChange}>
-            <option value="제품 구매">제품 구매 문의</option>
+            <option value="제품 문의">제품 문의</option>
+            <option value="솔루션 문의">솔루션 문의</option>
             <option value="A/S 신청">A/S 신청</option>
             <option value="기술 지원">기술 지원</option>
             <option value="기타">기타</option>

@@ -7,6 +7,7 @@ import styles from "./admin.module.css";
 export default function AdminDashboard() {
   const [productCount, setProductCount] = useState(0);
   const [inquiryCount, setInquiryCount] = useState(0);
+  const [downloadCount, setDownloadCount] = useState(0);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -21,8 +22,13 @@ export default function AdminDashboard() {
           .select("*", { count: "exact", head: true })
           .eq("status", "pending");
 
+        const { count: dCount } = await supabase
+          .from("downloads")
+          .select("*", { count: "exact", head: true });
+
         setProductCount(pCount || 0);
         setInquiryCount(iCount || 0);
+        setDownloadCount(dCount || 0);
       } catch (error) {
         console.error("Error fetching stats:", error);
       } finally {
@@ -51,6 +57,12 @@ export default function AdminDashboard() {
           <h3>새로운 서비스 문의</h3>
           <p style={{ fontSize: '2rem', fontWeight: 'bold', marginTop: '0.5rem', color: '#f00' }}>
             {loading ? "..." : inquiryCount}
+          </p>
+        </div>
+        <div style={{ padding: '1.5rem', border: '1px solid #e0e0e0', borderRadius: '8px', borderLeft: '4px solid #004a99', backgroundColor: '#fff' }}>
+          <h3>등록된 기술 자료</h3>
+          <p style={{ fontSize: '2rem', fontWeight: 'bold', marginTop: '0.5rem', color: '#004a99' }}>
+            {loading ? "..." : downloadCount}
           </p>
         </div>
       </div>

@@ -12,6 +12,7 @@ const adminNav = [
   { label: "히어로 배너 관리", href: "/admin/banner" },
   { label: "팝업 관리", href: "/admin/popups" },
   { label: "서비스 문의 관리", href: "/admin/inquiries" },
+  { label: "자료실 관리", href: "/admin/downloads" },
 ];
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {

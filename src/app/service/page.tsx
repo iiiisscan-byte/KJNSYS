@@ -46,9 +46,7 @@ export default function ServicePage() {
           </ul>
           
           <div style={{ marginTop: '2.5rem', padding: '1.5rem', backgroundColor: '#f9f9f9', borderRadius: '8px', fontSize: '0.95rem', color: '#666' }}>
-            <strong>주소:</strong><br />
-            경기도 용인시 기흥구 흥덕1로 13, <br />
-            흥덕IT밸리 컴플렉스 B동 508호
+            <strong>주소:</strong> 경기도 용인시 기흥구 흥덕1로 13, 흥덕IT밸리 컴플렉스 B동 508호
           </div>
         </div>
 

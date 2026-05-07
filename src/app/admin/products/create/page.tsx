@@ -14,6 +14,7 @@ export default function CreateProduct() {
   const [title, setTitle] = useState("");
   const [manufacturer, setManufacturer] = useState("");
   const [categoryId, setCategoryId] = useState("");
+  const [summary, setSummary] = useState("");
   const [description, setDescription] = useState("");
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
@@ -131,6 +132,7 @@ export default function CreateProduct() {
           title,
           category_id: categoryId,
           manufacturer,
+          summary,
           description,
           features: processedFeatures,
           specifications: processedSpecs,
@@ -217,12 +219,22 @@ export default function CreateProduct() {
             </div>
 
             <div style={{ gridColumn: "span 2" }}>
-              <label style={{ display: "block", marginBottom: "0.6rem", fontWeight: "700", color: "#333" }}>제품소개</label>
+              <label style={{ display: "block", marginBottom: "0.6rem", fontWeight: "700", color: "#333" }}>간단 소개 (목록 노출용)</label>
+              <textarea 
+                value={summary}
+                onChange={(e) => setSummary(e.target.value)}
+                style={{ width: "100%", padding: "0.8rem 1rem", border: "1px solid #e0e0e0", borderRadius: "8px", fontSize: "1rem", minHeight: "60px", resize: "vertical" }}
+                placeholder="목록 카드에 표시될 짧은 소개글을 작성하세요. (최적: 2~3줄)"
+              />
+            </div>
+
+            <div style={{ gridColumn: "span 2" }}>
+              <label style={{ display: "block", marginBottom: "0.6rem", fontWeight: "700", color: "#333" }}>제품 상세설명</label>
               <textarea 
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                style={{ width: "100%", padding: "0.8rem 1rem", border: "1px solid #e0e0e0", borderRadius: "8px", fontSize: "1rem", minHeight: "80px", resize: "vertical" }}
-                placeholder="제품 또는 솔루션에 대한 소개글을 작성하세요. (이 내용은 상세 페이지 상단과 목록에 노출됩니다.)"
+                style={{ width: "100%", padding: "0.8rem 1rem", border: "1px solid #e0e0e0", borderRadius: "8px", fontSize: "1rem", minHeight: "120px", resize: "vertical" }}
+                placeholder="제품 또는 솔루션에 대한 상세 소개글을 작성하세요. (이 내용은 상세 페이지 상단에 노출됩니다.)"
               />
             </div>
           </div>

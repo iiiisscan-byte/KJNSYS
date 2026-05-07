@@ -7,6 +7,7 @@ import { supabase } from "@/lib/supabase";
 interface Product {
   id: string;
   title: string;
+  summary: string | null;
   description: string | null;
   image_url: string | null;
   category_id: string;
@@ -29,7 +30,7 @@ export default function ProductPage({ searchParams }: { searchParams: Promise<{ 
           // 특정 카테고리가 선택된 경우
           finalQuery = supabase
             .from("products")
-            .select("id, title, description, image_url, category_id")
+            .select("id, title, summary, description, image_url, category_id")
             .eq("is_active", true)
             .eq("category_id", category);
           
@@ -50,7 +51,7 @@ export default function ProductPage({ searchParams }: { searchParams: Promise<{ 
             const catIds = prodCats.map(c => c.id);
             finalQuery = supabase
               .from("products")
-              .select("id, title, description, image_url, category_id")
+              .select("id, title, summary, description, image_url, category_id")
               .eq("is_active", true)
               .in("category_id", catIds);
           } else {
@@ -118,7 +119,7 @@ export default function ProductPage({ searchParams }: { searchParams: Promise<{ 
                 <div style={{ padding: '1.5rem' }}>
                   <h3 style={{ fontSize: '1.25rem', fontWeight: '700', marginBottom: '0.75rem', color: '#1a1a1a' }}>{product.title}</h3>
                   <p style={{ color: '#666', fontSize: '0.95rem', lineHeight: '1.5', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
-                    {product.description || "상세 설명을 보시려면 클릭하세요."}
+                    {product.summary || product.description || "상세 설명을 보시려면 클릭하세요."}
                   </p>
                   <div style={{ marginTop: '1.5rem', color: '#004a99', fontWeight: '600', fontSize: '0.9rem' }}>
                     상세보기 +

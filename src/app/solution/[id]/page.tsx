@@ -4,7 +4,7 @@ import { useEffect, useState, use } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
-import { FiArrowLeft, FiGrid, FiActivity } from "react-icons/fi";
+import { FiArrowLeft, FiClock, FiTag } from "react-icons/fi";
 
 interface Solution {
   id: string;
@@ -12,6 +12,7 @@ interface Solution {
   description: string | null;
   image_url: string | null;
   category_id: string;
+  manufacturer: string | null;
   features: any[] | null;
   specifications: any[] | null;
   created_at: string;
@@ -30,7 +31,7 @@ export default function SolutionDetailPage({ params }: { params: Promise<{ id: s
       const { data, error } = await supabase
         .from("products")
         .select(`
-          id, title, description, image_url, category_id, features, specifications, created_at,
+          id, title, description, image_url, category_id, manufacturer, features, specifications, created_at,
           categories (name)
         `)
         .eq("id", id)
@@ -66,67 +67,69 @@ export default function SolutionDetailPage({ params }: { params: Promise<{ id: s
             gap: '0.5rem', 
             background: 'none', 
             border: 'none', 
-            color: '#004a99', 
+            color: '#666', 
             cursor: 'pointer',
-            fontSize: '1rem',
-            fontWeight: '600'
+            fontSize: '1rem'
           }}
         >
-          <FiArrowLeft /> 솔루션 목록보기
+          <FiArrowLeft /> 목록으로 돌아가기
         </button>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '4rem', marginBottom: '4rem', alignItems: 'center' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.2fr', gap: '4rem', marginBottom: '4rem' }}>
+        {/* 솔루션 메인 이미지 */}
+        <div style={{ 
+          backgroundColor: '#fff', 
+          border: '1px solid #eee', 
+          borderRadius: '16px', 
+          padding: '2rem',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          height: '450px'
+        }}>
+          {solution.image_url ? (
+            <img src={solution.image_url} alt={solution.title} style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }} />
+          ) : (
+            <div style={{ color: '#ccc' }}>대표 이미지가 없습니다.</div>
+          )}
+        </div>
+
         {/* 솔루션 정보 */}
-        <div style={{ display: 'flex', flexDirection: 'column' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
-            <span style={{ color: '#004a99', fontSize: '1rem', fontWeight: '800' }}>
-              {solution.categories.name}
-            </span>
-          </div>
-          <h1 style={{ fontSize: '2.5rem', fontWeight: '900', color: '#1a1a1a', marginBottom: '1.5rem', lineHeight: '1.3', letterSpacing: '-0.02em' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+          <h1 style={{ fontSize: '2.5rem', fontWeight: '800', color: '#1a1a1a', marginBottom: '1.5rem', lineHeight: '1.3', letterSpacing: '-0.02em' }}>
             {solution.title}
           </h1>
           
-          <div style={{ fontSize: '1.1rem', color: '#555', lineHeight: '1.8', wordBreak: 'break-word', whiteSpace: 'pre-line', marginBottom: '3rem' }}>
+          <div style={{ fontSize: '1.05rem', color: '#555', lineHeight: '1.8', wordBreak: 'break-word', whiteSpace: 'pre-line', marginBottom: '2.5rem' }}>
             {solution.description || "본 솔루션에 대한 소개가 등록되지 않았습니다."}
           </div>
           
-          <div>
+          <div style={{ borderTop: '1px solid #eee', paddingTop: '1.5rem', display: 'flex', gap: '2rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#888', fontSize: '0.9rem' }}>
+              <FiClock /> 제조사: {solution.manufacturer || "-"}
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#888', fontSize: '0.9rem' }}>
+              <FiTag /> 분류: {solution.categories.name}
+            </div>
+          </div>
+          
+          <div style={{ marginTop: '3rem' }}>
             <Link href="/service/inquiry" style={{ 
               display: 'inline-block',
-              padding: '1.2rem 3.5rem',
-              backgroundColor: '#000',
+              padding: '1.2rem 3rem',
+              backgroundColor: '#004a99',
               color: '#fff',
               textDecoration: 'none',
-              borderRadius: '50px',
+              borderRadius: '8px',
               fontWeight: '700',
-              fontSize: '1.1rem',
-              transition: 'transform 0.2s ease',
-              boxShadow: '0 8px 16px rgba(0,0,0,0.1)'
+              fontSize: '1.1rem'
             }}>
-              솔루션 도입 문의
+              솔루션 도입 문의하기
             </Link>
           </div>
         </div>
-
-        {/* 솔루션 메인 이미지 */}
-        <div style={{ 
-          position: 'relative',
-          height: '500px',
-          borderRadius: '24px',
-          overflow: 'hidden',
-          boxShadow: '0 20px 40px rgba(0,0,0,0.08)'
-        }}>
-          {solution.image_url ? (
-            <img src={solution.image_url} alt={solution.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-          ) : (
-            <div style={{ width: '100%', height: '100%', backgroundColor: '#004a99', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: '1.2rem' }}>
-              KJNSYS SOLUTION
-            </div>
-          )}
-        </div>
-        </div>
+      </div>
       </div>
       </div>
 

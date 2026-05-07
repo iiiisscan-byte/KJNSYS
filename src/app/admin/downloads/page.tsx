@@ -104,7 +104,7 @@ export default function DownloadManagement() {
   };
 
   const handleDelete = async (id: string) => {
-    console.log("자료 삭제 시도 ID:", id);
+    if (!window.confirm("정말로 이 자료를 삭제하시겠습니까?")) return;
     try {
       const { data, error } = await supabase
         .from("downloads")
@@ -170,6 +170,15 @@ export default function DownloadManagement() {
               onChange={(e) => setVersion(e.target.value)} 
               placeholder="예: v1.2.0"
               style={{ width: "100%", padding: "0.8rem", borderRadius: "8px", border: "1px solid #ddd" }}
+            />
+          </div>
+          <div style={{ gridColumn: "span 2" }}>
+            <label style={{ display: "block", marginBottom: "0.5rem", fontWeight: "600" }}>설명 (선택)</label>
+            <textarea 
+              value={description} 
+              onChange={(e) => setDescription(e.target.value)} 
+              placeholder="자료에 대한 간단한 설명을 입력하세요."
+              style={{ width: "100%", padding: "0.8rem", borderRadius: "8px", border: "1px solid #ddd", minHeight: "80px", resize: "vertical" }}
             />
           </div>
           <div style={{ gridColumn: "span 2" }}>
