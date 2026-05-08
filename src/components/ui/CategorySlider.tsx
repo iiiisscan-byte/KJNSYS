@@ -59,16 +59,40 @@ const CategorySlider = () => {
 
   useEffect(() => {
     async function loadCategories() {
-      const { data, error } = await supabase
+      // 1. 카테고리 데이터 가져오기
+      const { data: catData } = await supabase
         .from('categories')
         .select('*')
         .order('created_at', { ascending: false });
 
-      if (data && data.length > 0) {
-        const mapped = data.map((cat) => ({
+      // 2. 모든 제품의 카테고리 ID와 이미지를 가져와서 카테고리별 최신 이미지 맵 생성
+      const { data: prodData } = await supabase
+        .from('products')
+        .select('category_id, image_url')
+        .order('created_at', { ascending: false });
+
+      if (catData && catData.length > 0) {
+        const imageMap: Record<string, string> = {};
+        if (prodData) {
+          prodData.forEach(p => {
+            if (!imageMap[p.category_id] && p.image_url) {
+              imageMap[p.category_id] = p.image_url;
+            }
+          });
+        }
+
+        // 제품(product)이 우선, 솔루션(solution)이 다음으로 오도록 정렬
+        const sortedData = [...catData].sort((a, b) => {
+          if (a.type === 'product' && b.type === 'solution') return -1;
+          if (a.type === 'solution' && b.type === 'product') return 1;
+          return 0;
+        });
+
+        const mapped = sortedData.map((cat) => ({
           id: cat.id,
           name: cat.name,
-          image: categoryImageMap[cat.name] || "/images/categories/flatbed_scanner.png",
+          // 최신 제품 이미지가 있으면 사용, 없으면 기존 맵 또는 기본 이미지 사용
+          image: imageMap[cat.id] || categoryImageMap[cat.name] || "/images/categories/flatbed_scanner.png",
           link: `/${cat.type === 'solution' ? 'solution' : 'product'}?category=${cat.id}`
         }));
         setCategories(mapped);
@@ -80,10 +104,10 @@ const CategorySlider = () => {
   const scroll = (direction: 'left' | 'right') => {
     if (scrollRef.current) {
       const { scrollLeft, clientWidth } = scrollRef.current;
-      const scrollTo = direction === 'left' 
-        ? scrollLeft - clientWidth / 2 
+      const scrollTo = direction === 'left'
+        ? scrollLeft - clientWidth / 2
         : scrollLeft + clientWidth / 2;
-      
+
       scrollRef.current.scrollTo({ left: scrollTo, behavior: 'smooth' });
     }
   };
@@ -92,16 +116,16 @@ const CategorySlider = () => {
     <section className={styles.section}>
       <div className={styles.container}>
         <h2 className={styles.title}>케이제이엔시스의 다양한 제품과 솔루션을 만나보세요</h2>
-        
+
         <div className={styles.sliderWrapper}>
-          <button 
-            className={`${styles.navButton} ${styles.prevButton}`} 
+          <button
+            className={`${styles.navButton} ${styles.prevButton}`}
             onClick={() => scroll('left')}
             aria-label="Previous"
           >
             <FiChevronLeft size={24} />
           </button>
-          
+
           <div className={styles.sliderContainer} ref={scrollRef}>
             <div className={styles.sliderContent}>
               {categories.map((category) => (
@@ -120,9 +144,9 @@ const CategorySlider = () => {
               ))}
             </div>
           </div>
-          
-          <button 
-            className={`${styles.navButton} ${styles.nextButton}`} 
+
+          <button
+            className={`${styles.navButton} ${styles.nextButton}`}
             onClick={() => scroll('right')}
             aria-label="Next"
           >

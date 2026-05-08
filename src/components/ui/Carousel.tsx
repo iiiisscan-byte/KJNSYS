@@ -3,18 +3,18 @@
 import { useState, useEffect } from "react";
 import styles from "./Carousel.module.css";
 import Image from "next/image";
-import Link from "next/link";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
+import { supabase } from "@/lib/supabase";
 
 interface SlideData {
-  id: number;
+  id: string | number;
   image: string;
   title: string;
   description: string;
   link: string;
 }
 
-const slides: SlideData[] = [
+const DEFAULT_SLIDES: SlideData[] = [
   {
     id: 1,
     image: "/images/banner1.png",
@@ -39,20 +39,66 @@ const slides: SlideData[] = [
 ];
 
 export default function Carousel() {
+  const [slides, setSlides] = useState<SlideData[]>([]);
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchBanners() {
+      try {
+        const { data, error } = await supabase
+          .from("banners")
+          .select("*")
+          .eq("is_active", true)
+          .order("created_at", { ascending: true })
+          .limit(3);
+
+        if (error) throw error;
+
+        if (data && data.length > 0) {
+          const mappedSlides = data.map((item) => ({
+            id: item.id,
+            image: item.image_url,
+            title: item.title,
+            description: item.description,
+            link: item.link_url || "/product",
+          }));
+          setSlides(mappedSlides);
+        } else {
+          setSlides(DEFAULT_SLIDES);
+        }
+      } catch (error) {
+        console.error("Error fetching carousel banners:", error);
+        setSlides(DEFAULT_SLIDES);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchBanners();
+  }, []);
 
   const nextSlide = () => {
+    if (slides.length <= 1) return;
     setCurrentSlide((prev) => (prev + 1) % slides.length);
   };
 
   const prevSlide = () => {
+    if (slides.length <= 1) return;
     setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
   };
 
   useEffect(() => {
-    const timer = setInterval(nextSlide, 5000); // 5초 간격
+    if (slides.length <= 1) return;
+    const timer = setInterval(nextSlide, 5000);
     return () => clearInterval(timer);
-  }, []);
+  }, [slides.length]);
+
+  if (loading) {
+    return <div className={styles.carouselContainer} style={{ backgroundColor: '#f5f5f5', height: '600px' }}></div>;
+  }
+
+  if (slides.length === 0) return null;
 
   return (
     <div className={styles.carouselContainer}>
@@ -68,36 +114,40 @@ export default function Carousel() {
               fill
               className={styles.image}
               priority={index === 0}
+              unoptimized={slide.image.endsWith('.gif')}
             />
           </div>
           <div className={styles.content}>
             <div className={`container ${styles.contentContainer}`}>
-              <h2 className={styles.title}>{slide.title}</h2>
+              <h2 className={styles.title} style={{ whiteSpace: 'pre-line' }}>{slide.title}</h2>
               <p className={styles.description}>{slide.description}</p>
-
             </div>
           </div>
         </div>
       ))}
 
-      <button className={`${styles.navBtn} ${styles.prevBtn}`} onClick={prevSlide} aria-label="Previous slide">
-        <FiChevronLeft />
-      </button>
-      <button className={`${styles.navBtn} ${styles.nextBtn}`} onClick={nextSlide} aria-label="Next slide">
-        <FiChevronRight />
-      </button>
-      <div className={styles.indicators}>
-        {slides.map((_, index) => (
-          <button
-            key={index}
-            className={`${styles.indicator} ${
-              index === currentSlide ? styles.activeIndicator : ""
-            }`}
-            onClick={() => setCurrentSlide(index)}
-            aria-label={`Go to slide ${index + 1}`}
-          />
-        ))}
-      </div>
+      {slides.length > 1 && (
+        <>
+          <button className={`${styles.navBtn} ${styles.prevBtn}`} onClick={prevSlide} aria-label="Previous slide">
+            <FiChevronLeft />
+          </button>
+          <button className={`${styles.navBtn} ${styles.nextBtn}`} onClick={nextSlide} aria-label="Next slide">
+            <FiChevronRight />
+          </button>
+          <div className={styles.indicators}>
+            {slides.map((_, index) => (
+              <button
+                key={index}
+                className={`${styles.indicator} ${
+                  index === currentSlide ? styles.activeIndicator : ""
+                }`}
+                onClick={() => setCurrentSlide(index)}
+                aria-label={`Go to slide ${index + 1}`}
+              />
+            ))}
+          </div>
+        </>
+      )}
     </div>
   );
 }

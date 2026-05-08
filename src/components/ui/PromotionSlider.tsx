@@ -6,7 +6,7 @@ import styles from './PromotionSlider.module.css';
 import InfoCard from './InfoCard';
 
 interface Product {
-  id: number;
+  id: string | number;
   title: string;
   description: string;
   image: string;
