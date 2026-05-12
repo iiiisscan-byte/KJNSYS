@@ -39,7 +39,7 @@ export default function Footer() {
             &copy; {new Date().getFullYear()} KJNSYS Co., Ltd. All Rights Reserved.
           </div>
           <div className={styles.slogan}>
-            Designed & Built for Professional Digitalization.
+            IT Infra & Imaging Solution Provider
           </div>
         </div>
       </div>
