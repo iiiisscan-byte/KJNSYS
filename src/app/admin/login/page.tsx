@@ -1,16 +1,36 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { supabase } from "@/lib/supabase";
 
 export default function AdminLogin() {
   const [password, setPassword] = useState("");
+  const [dbPassword, setDbPassword] = useState<string | null>(null);
   const router = useRouter();
+
+  useEffect(() => {
+    async function getAdminPassword() {
+      const { data, error } = await supabase
+        .from("admin_config")
+        .select("value")
+        .eq("key", "admin_password")
+        .single();
+      
+      if (data) {
+        setDbPassword(data.value);
+      } else {
+        // 테이블이 없거나 데이터가 없는 경우 기본값 사용 (SQL 실행 전 대비)
+        setDbPassword("admin123");
+      }
+    }
+    getAdminPassword();
+  }, []);
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    // 실제 구현에서는 Supabase Auth 활용
-    if (password === "admin123") { // 임시 비밀번호
+    
+    if (password === dbPassword) {
       localStorage.setItem("kjnsys_admin_auth", "true");
       router.push("/admin");
     } else {

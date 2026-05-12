@@ -14,6 +14,7 @@ const adminNav = [
   { label: "팝업 관리", href: "/admin/popups" },
   { label: "서비스 문의 관리", href: "/admin/inquiries" },
   { label: "자료실 관리", href: "/admin/downloads" },
+  { label: "비밀번호 변경", href: "/admin/profile" },
 ];
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
