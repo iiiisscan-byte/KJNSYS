@@ -1,7 +1,7 @@
 import styles from "./Legal.module.css";
 
 export default function PrivacyPage() {
-  const lastUpdated = "2024년 5월 12일";
+  const lastUpdated = "2026년 5월 12일";
 
   return (
     <div className={styles.container}>
