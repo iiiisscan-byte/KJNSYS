@@ -64,9 +64,10 @@
 
 @media (max-width: 768px) {
   .nav {
-    display: none; /* Mobile menu will be handled separately or simple toggle */
+    display: none;
+    /* Mobile menu will be handled separately or simple toggle */
   }
-  
+
   .mobileMenuBtn {
     display: block;
   }

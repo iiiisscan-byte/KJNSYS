@@ -158,7 +158,6 @@ export default function DownloadManagement() {
               <option value="드라이버">드라이버</option>
               <option value="매뉴얼">매뉴얼</option>
               <option value="카탈로그">카탈로그/브로셔</option>
-              <option value="펌웨어">펌웨어</option>
               <option value="기타">기타 자료</option>
             </select>
           </div>

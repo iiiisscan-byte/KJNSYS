@@ -21,7 +21,7 @@ export default function ArchivePage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("전체");
 
-  const categories = ["전체", "드라이버", "매뉴얼", "카탈로그", "펌웨어", "기타"];
+  const categories = ["전체", "드라이버", "매뉴얼", "카탈로그", "기타"];
 
   useEffect(() => {
     fetchDownloads();

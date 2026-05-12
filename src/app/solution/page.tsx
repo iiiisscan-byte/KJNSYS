@@ -11,6 +11,7 @@ interface Solution {
   description: string | null;
   image_url: string | null;
   category_id: string;
+  created_at?: string;
 }
 
 export default function SolutionPage({ searchParams }: { searchParams: Promise<{ category?: string }> }) {
@@ -30,7 +31,7 @@ export default function SolutionPage({ searchParams }: { searchParams: Promise<{
           // 특정 카테고리가 선택된 경우
           finalQuery = supabase
             .from("products")
-            .select("id, title, summary, description, image_url, category_id")
+            .select("id, title, summary, description, image_url, category_id, created_at")
             .eq("is_active", true)
             .eq("category_id", category);
           
@@ -45,13 +46,14 @@ export default function SolutionPage({ searchParams }: { searchParams: Promise<{
           const { data: solCats } = await supabase
             .from("categories")
             .select("id")
-            .eq("type", "solution");
+            .eq("type", "solution")
+            .order("created_at", { ascending: false });
           
           if (solCats && solCats.length > 0) {
             const catIds = solCats.map(c => c.id);
             finalQuery = supabase
               .from("products")
-              .select("id, title, summary, description, image_url, category_id")
+              .select("id, title, summary, description, image_url, category_id, created_at")
               .eq("is_active", true)
               .in("category_id", catIds);
           } else {
@@ -69,7 +71,29 @@ export default function SolutionPage({ searchParams }: { searchParams: Promise<{
         if (error) {
           console.error("Error loading solutions:", error.message || JSON.stringify(error));
         } else {
-          setSolutions(data || []);
+          let fetchedSolutions = data || [];
+          
+          if (!category) {
+            const { data: catsForOrder } = await supabase
+              .from("categories")
+              .select("id")
+              .eq("type", "solution")
+              .order("created_at", { ascending: false });
+              
+            if (catsForOrder) {
+              const catOrderMap = new Map(catsForOrder.map((c, i) => [c.id, i]));
+              fetchedSolutions.sort((a, b) => {
+                const orderA = catOrderMap.get(a.category_id) ?? 999;
+                const orderB = catOrderMap.get(b.category_id) ?? 999;
+                if (orderA !== orderB) {
+                  return orderA - orderB;
+                }
+                return 0;
+              });
+            }
+          }
+
+          setSolutions(fetchedSolutions);
         }
       } catch (err: any) {
         console.error("Unhandled error in loadSolutions:", err);
