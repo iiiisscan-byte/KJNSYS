@@ -1,72 +1,51 @@
+import styles from "./Service.module.css";
+
 export default function ServicePage() {
   return (
-    <div className="container mt-4 mb-8">
-      <h2 className="mb-4 text-center" style={{ fontSize: 'clamp(1.5rem, 5vw, 2.2rem)', fontWeight: '800', wordBreak: 'keep-all' }}>고객센터 안내</h2>
+    <div className={styles.container}>
+      <h2 className={styles.title}>고객센터 안내</h2>
       
-      <div style={{ 
-        display: 'grid', 
-        gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', 
-        gap: '2.5rem',
-        alignItems: 'stretch',
-        marginTop: '2rem'
-      }}>
+      <div className={styles.grid}>
         {/* Info Box */}
-        <div style={{ 
-          backgroundColor: '#fff', 
-          padding: '2rem', 
-          borderRadius: '12px', 
-          boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
-          border: '1px solid #eee',
-          height: '100%'
-        }}>
-          <h3 style={{ marginBottom: '2rem', color: '#004a99', fontSize: '1.5rem', borderBottom: '2px solid #004a99', paddingBottom: '0.5rem', display: 'inline-block' }}>
+        <div className={styles.infoBox}>
+          <h3 className={styles.sectionTitle}>
             운영 시간 및 연락처
           </h3>
-          <ul style={{ listStyle: 'none', padding: 0, color: '#333', lineHeight: '2.2', fontSize: '1rem' }}>
-            <li style={{ borderBottom: '1px solid #f0f0f0', padding: '0.5rem 0' }}>
-              <strong style={{ width: '100px', display: 'inline-block', color: '#666' }}>평일</strong> 
-              <span>09:00 ~ 18:00 (점심 12:00 ~ 13:00)</span>
+          <ul className={styles.infoList}>
+            <li className={styles.infoItem}>
+              <div className={styles.label}>평일</div> 
+              <div className={styles.value}>09:00 ~ 18:00 (점심 12:00 ~ 13:00)</div>
             </li>
-            <li style={{ borderBottom: '1px solid #f0f0f0', padding: '0.5rem 0' }}>
-              <strong style={{ width: '100px', display: 'inline-block', color: '#666' }}>휴무</strong> 
-              <span>주말 및 공휴일</span>
+            <li className={styles.infoItem}>
+              <div className={styles.label}>휴무</div> 
+              <div className={styles.value}>주말 및 공휴일</div>
             </li>
-            <li style={{ borderBottom: '1px solid #f0f0f0', padding: '0.5rem 0' }}>
-              <strong style={{ width: '100px', display: 'inline-block', color: '#666' }}>전화</strong> 
-              <span style={{ fontWeight: '700', fontSize: '1.1rem' }}>031-273-9171</span>
+            <li className={styles.infoItem}>
+              <div className={styles.label}>전화</div> 
+              <div className={styles.value}><strong>031-273-9171</strong></div>
             </li>
-            <li style={{ borderBottom: '1px solid #f0f0f0', padding: '0.5rem 0' }}>
-              <strong style={{ width: '100px', display: 'inline-block', color: '#666' }}>팩스</strong> 
-              <span>031-660-7066</span>
+            <li className={styles.infoItem}>
+              <div className={styles.label}>팩스</div> 
+              <div className={styles.value}>031-660-7066</div>
             </li>
-            <li style={{ padding: '0.5rem 0' }}>
-              <strong style={{ width: '100px', display: 'inline-block', color: '#666' }}>이메일</strong> 
-              <a href="mailto:isscan@kjnsys.com" style={{ color: '#004a99', textDecoration: 'none' }}>isscan@kjnsys.com</a>
+            <li className={styles.infoItem}>
+              <div className={styles.label}>이메일</div> 
+              <div className={styles.value}>
+                <a href="mailto:isscan@kjnsys.com" style={{ color: '#004a99', textDecoration: 'none' }}>isscan@kjnsys.com</a>
+              </div>
             </li>
           </ul>
           
-          <div style={{ marginTop: '2.5rem', padding: '1.5rem', backgroundColor: '#f9f9f9', borderRadius: '8px', fontSize: '0.95rem', color: '#666' }}>
+          <div className={styles.addressBox}>
             <strong>주소:</strong> 경기도 용인시 기흥구 흥덕1로 13, 흥덕IT밸리 컴플렉스 B동 508호
           </div>
         </div>
 
         {/* Map Box */}
-        <div style={{ 
-          borderRadius: '12px', 
-          overflow: 'hidden', 
-          boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
-          border: '1px solid #eee',
-          height: '100%',
-          minHeight: '450px'
-        }}>
+        <div className={styles.mapBox}>
           <iframe 
             src="https://maps.google.com/maps?q=%EA%B2%BD%EA%B8%B0%EB%8F%84%20%EC%9A%A9%EC%9D%B8%EC%8B%9C%20%EA%B8%B0%ED%9D%A5%EA%B5%AC%20%ED%9D%A5%EB%8D%951%EB%A1%9C%2013%20%ED%9D%A5%EB%8D%95IT%EB%B0%9C%EB%A6%AC&t=&z=15&ie=UTF8&iwloc=&output=embed"
-            style={{
-              width: '100%',
-              height: '100%',
-              border: 0,
-              minHeight: '450px'
-            }}
+            className={styles.mapFrame}
             allowFullScreen
             loading="lazy"
           ></iframe>
