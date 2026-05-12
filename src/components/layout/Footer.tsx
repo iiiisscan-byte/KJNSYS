@@ -21,7 +21,7 @@ export default function Footer() {
             <div className={styles.linkGroup}>
               <h4 className={styles.groupTitle}>바로가기</h4>
               <div className={styles.groupLinks}>
-                <Link href="/">회사소개</Link>
+                <Link href="/#about">회사소개</Link>
                 <Link href="/product">제품</Link>
                 <Link href="/solution">솔루션</Link>
                 <Link href="/service">고객지원</Link>
