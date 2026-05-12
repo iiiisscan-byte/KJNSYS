@@ -88,16 +88,16 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
                 {product.description || "본 제품에 대한 소개가 등록되지 않았습니다."}
               </div>
               
-              <div className={styles.metaInfo}>
-                <div className={styles.metaItem}>
-                  <FiClock /> 제조사: {product.manufacturer || "-"}
+              <div className={styles.metaWrapper}>
+                <div className={styles.metaInfo}>
+                  <div className={styles.metaItem}>
+                    <FiClock /> 제조사: {product.manufacturer || "-"}
+                  </div>
+                  <div className={styles.metaItem}>
+                    <FiTag /> 분류: {product.categories.name}
+                  </div>
                 </div>
-                <div className={styles.metaItem}>
-                  <FiTag /> 분류: {product.categories.name}
-                </div>
-              </div>
-              
-              <div style={{ marginTop: '3rem' }}>
+                
                 <Link href="/service/inquiry" className={styles.inquiryBtn}>
                   제품 및 서비스 문의하기
                 </Link>

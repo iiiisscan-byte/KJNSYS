@@ -88,16 +88,16 @@ export default function SolutionDetailPage({ params }: { params: Promise<{ id: s
                 {solution.description || "본 솔루션에 대한 소개가 등록되지 않았습니다."}
               </div>
               
-              <div className={styles.metaInfo}>
-                <div className={styles.metaItem}>
-                  <FiClock /> 제조사: {solution.manufacturer || "-"}
+              <div className={styles.metaWrapper}>
+                <div className={styles.metaInfo}>
+                  <div className={styles.metaItem}>
+                    <FiClock /> 제조사: {solution.manufacturer || "-"}
+                  </div>
+                  <div className={styles.metaItem}>
+                    <FiTag /> 분류: {solution.categories.name}
+                  </div>
                 </div>
-                <div className={styles.metaItem}>
-                  <FiTag /> 분류: {solution.categories.name}
-                </div>
-              </div>
-              
-              <div style={{ marginTop: '3rem' }}>
+                
                 <Link href="/service/inquiry" className={styles.inquiryBtn}>
                   솔루션 도입 문의하기
                 </Link>
