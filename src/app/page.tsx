@@ -41,7 +41,7 @@ export default async function Home() {
       </section>
 
       {/* 2. About Company Section */}
-      <section id="about" style={{ backgroundColor: '#fff', padding: '8rem 20px' }}>
+      <section id="about" style={{ backgroundColor: '#fff', padding: '5rem 20px' }}>
         <div className="container" style={{ textAlign: 'center', maxWidth: '900px', margin: '0 auto' }}>
           <h3 style={{ fontSize: '1rem', color: '#004a99', letterSpacing: '0.1em', marginBottom: '1.5rem', fontWeight: '700' }}>케이제이엔시스 회사소개</h3>
           <h2 style={{ fontSize: '2.8rem', fontWeight: '800', marginBottom: '2.5rem', lineHeight: '1.3', color: '#1a1a1a' }}>
@@ -58,9 +58,9 @@ export default async function Home() {
       </section>
 
       {/* 3. Featured Section (PROMOTION) */}
-      <section id="promotions" style={{ backgroundColor: '#f9f9f9', padding: '6rem 20px' }}>
+      <section id="promotions" style={{ backgroundColor: '#f9f9f9', padding: '4rem 20px' }}>
         <div className="container">
-          <div style={{ marginBottom: '4rem', textAlign: 'center' }}>
+          <div style={{ marginBottom: '2.5rem', textAlign: 'center' }}>
             <h3 style={{ fontSize: '0.9rem', color: '#e63946', letterSpacing: '0.2em', marginBottom: '1rem', fontWeight: '700' }}>PROMOTION</h3>
             <h2 style={{ fontSize: '2.5rem', fontWeight: '800' }}>진행중인 특별 프로모션</h2>
           </div>
