@@ -104,9 +104,14 @@ const CategorySlider = () => {
   const scroll = (direction: 'left' | 'right') => {
     if (scrollRef.current) {
       const { scrollLeft, clientWidth } = scrollRef.current;
+      // 카드 너비 + gap (25px)
+      const cardWidth = clientWidth < 768 ? 240 : 280;
+      const gap = 25;
+      const moveAmount = cardWidth + gap;
+      
       const scrollTo = direction === 'left'
-        ? scrollLeft - clientWidth / 2
-        : scrollLeft + clientWidth / 2;
+        ? scrollLeft - moveAmount
+        : scrollLeft + moveAmount;
 
       scrollRef.current.scrollTo({ left: scrollTo, behavior: 'smooth' });
     }
