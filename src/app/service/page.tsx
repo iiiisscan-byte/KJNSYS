@@ -1,19 +1,19 @@
 export default function ServicePage() {
   return (
     <div className="container mt-4 mb-8">
-      <h2 className="mb-4 text-center" style={{ fontSize: '2.2rem', fontWeight: '800' }}>고객센터 안내</h2>
+      <h2 className="mb-4 text-center" style={{ fontSize: 'clamp(1.5rem, 5vw, 2.2rem)', fontWeight: '800', wordBreak: 'keep-all' }}>고객센터 안내</h2>
       
       <div style={{ 
         display: 'grid', 
-        gridTemplateColumns: 'repeat(auto-fit, minmax(450px, 1fr))', 
-        gap: '2rem',
-        alignItems: 'start',
-        marginTop: '3rem'
+        gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', 
+        gap: '2.5rem',
+        alignItems: 'stretch',
+        marginTop: '2rem'
       }}>
         {/* Info Box */}
         <div style={{ 
           backgroundColor: '#fff', 
-          padding: '2.5rem', 
+          padding: '2rem', 
           borderRadius: '12px', 
           boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
           border: '1px solid #eee',
@@ -22,7 +22,7 @@ export default function ServicePage() {
           <h3 style={{ marginBottom: '2rem', color: '#004a99', fontSize: '1.5rem', borderBottom: '2px solid #004a99', paddingBottom: '0.5rem', display: 'inline-block' }}>
             운영 시간 및 연락처
           </h3>
-          <ul style={{ listStyle: 'none', padding: 0, color: '#333', lineHeight: '2.5', fontSize: '1.1rem' }}>
+          <ul style={{ listStyle: 'none', padding: 0, color: '#333', lineHeight: '2.2', fontSize: '1rem' }}>
             <li style={{ borderBottom: '1px solid #f0f0f0', padding: '0.5rem 0' }}>
               <strong style={{ width: '100px', display: 'inline-block', color: '#666' }}>평일</strong> 
               <span>09:00 ~ 18:00 (점심 12:00 ~ 13:00)</span>
@@ -33,7 +33,7 @@ export default function ServicePage() {
             </li>
             <li style={{ borderBottom: '1px solid #f0f0f0', padding: '0.5rem 0' }}>
               <strong style={{ width: '100px', display: 'inline-block', color: '#666' }}>전화</strong> 
-              <span style={{ fontWeight: '700', fontSize: '1.2rem' }}>031-273-9171</span>
+              <span style={{ fontWeight: '700', fontSize: '1.1rem' }}>031-273-9171</span>
             </li>
             <li style={{ borderBottom: '1px solid #f0f0f0', padding: '0.5rem 0' }}>
               <strong style={{ width: '100px', display: 'inline-block', color: '#666' }}>팩스</strong> 
