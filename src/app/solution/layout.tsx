@@ -49,11 +49,7 @@ export default function SolutionLayout({ children }: { children: React.ReactNode
             </div>
             <h1 style={{ fontSize: 'clamp(1.8rem, 5vw, 2.4rem)', fontWeight: '800', color: '#1a1a1a', margin: 0 }}>솔루션</h1>
           </div>
-<<<<<<< HEAD
-          <p style={{ fontSize: '0.95rem', color: '#666', maxWidth: '600px', margin: '0 auto', wordBreak: 'keep-all', lineHeight: '1.6' }}>
-=======
           <p style={{ fontSize: '1rem', color: '#666', maxWidth: '800px', margin: '0 auto', wordBreak: 'keep-all', lineHeight: '1.6' }}>
->>>>>>> eec6b42 (feat: 히어로 배너 정렬 수정 및 5구 확장, 레이아웃 문구 수정)
             효율적인 디지털 전환과 보안 강화를 위한 케이제이엔시스만의 최적화된 맞춤형 솔루션을 제공합니다.
           </p>
         </div>
