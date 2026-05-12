@@ -28,7 +28,11 @@ export default function ServiceLayout({ children }: { children: React.ReactNode 
             </div>
             <h1 style={{ fontSize: 'clamp(1.8rem, 5vw, 2.4rem)', fontWeight: '800', color: '#1a1a1a', margin: 0 }}>고객지원</h1>
           </div>
+<<<<<<< HEAD
           <p style={{ fontSize: '0.95rem', color: '#666', maxWidth: '600px', margin: '0 auto', wordBreak: 'keep-all', lineHeight: '1.6' }}>
+=======
+          <p style={{ fontSize: '1rem', color: '#666', maxWidth: '900px', margin: '0 auto', wordBreak: 'keep-all', lineHeight: '1.6' }}>
+>>>>>>> eec6b42 (feat: 히어로 배너 정렬 수정 및 5구 확장, 레이아웃 문구 수정)
             고객님의 목소리에 귀를 기울이며, 최상의 서비스를 위해 언제나 준비되어 있습니다. 무엇이든 도와드리겠습니다.
           </p>
         </div>

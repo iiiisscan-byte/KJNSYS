@@ -51,7 +51,7 @@ export default function Carousel() {
           .select("*")
           .eq("is_active", true)
           .order("created_at", { ascending: true })
-          .limit(3);
+          .limit(5);
 
         if (error) throw error;
 

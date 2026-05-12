@@ -53,7 +53,7 @@
 }
 
 .contentContainer {
-  text-align: left; /* Aligned left for premium feel */
+  text-align: center;
   color: #ffffff;
 }
 
@@ -81,7 +81,8 @@
   transform: translateY(30px);
   opacity: 0;
   transition: all 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) 0.6s;
-  max-width: 700px;
+  max-width: 800px;
+  margin: 0 auto 3rem;
   line-height: 1.5;
   font-weight: 300;
 }

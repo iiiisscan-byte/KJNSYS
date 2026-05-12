@@ -85,10 +85,10 @@
   }
   
   .prevButton {
-    left: 5px;
+    left: -5px;
   }
   
   .nextButton {
-    right: 5px;
+    right: -5px;
   }
 }

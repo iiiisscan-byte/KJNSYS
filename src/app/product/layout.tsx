@@ -50,8 +50,13 @@ export default function ProductLayout({ children }: { children: React.ReactNode 
             </div>
             <h1 style={{ fontSize: 'clamp(1.8rem, 5vw, 2.4rem)', fontWeight: '800', color: '#1a1a1a', margin: 0 }}>제품</h1>
           </div>
+<<<<<<< HEAD
           <p style={{ fontSize: '0.95rem', color: '#666', maxWidth: '600px', margin: '0 auto', wordBreak: 'keep-all', lineHeight: '1.6' }}>
             최상의 비즈니스 파트너, 케이제이엔시스의 혁신적인 이미지 프로세싱 및 스캐닝 제품군을 만나보세요.
+=======
+          <p style={{ fontSize: '1rem', color: '#666', maxWidth: '800px', margin: '0 auto', wordBreak: 'keep-all', lineHeight: '1.6' }}>
+            케이제이엔시스의 혁신적인 이미지 프로세싱 및 스캐닝 제품군을 만나보세요.
+>>>>>>> eec6b42 (feat: 히어로 배너 정렬 수정 및 5구 확장, 레이아웃 문구 수정)
           </p>
         </div>
       </div>

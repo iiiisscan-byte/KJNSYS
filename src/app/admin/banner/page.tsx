@@ -32,6 +32,8 @@ export default function BannerManagement() {
     { ...DEFAULT_BANNER },
     { ...DEFAULT_BANNER },
     { ...DEFAULT_BANNER },
+    { ...DEFAULT_BANNER },
+    { ...DEFAULT_BANNER },
   ]);
 
   useEffect(() => {
@@ -42,7 +44,7 @@ export default function BannerManagement() {
           .select("*")
           .eq("is_active", true)
           .order("created_at", { ascending: true })
-          .limit(3);
+          .limit(5);
 
         if (error) throw error;
 
@@ -50,7 +52,7 @@ export default function BannerManagement() {
           setBanners(prev => {
             const next = [...prev];
             data.forEach((item, index) => {
-              if (index < 3) {
+              if (index < 5) {
                 next[index] = {
                   id: item.id,
                   title: item.title || "",
@@ -161,7 +163,7 @@ export default function BannerManagement() {
 
       if (insertError) throw insertError;
 
-      alert("히어로 배너 3구가 성공적으로 업데이트되었습니다.");
+      alert("히어로 배너 5구가 성공적으로 업데이트되었습니다.");
       window.location.reload(); // 최신 상태 반영을 위해 새로고침
     } catch (error: any) {
       console.error("Error saving banners:", error);
@@ -176,12 +178,12 @@ export default function BannerManagement() {
   return (
     <div className={styles.card}>
       <div className={styles.header}>
-        <h2>히어로 세션 관리 (3구)</h2>
-        <p style={{ color: '#666', marginTop: '0.5rem' }}>메인 페이지 상단 캐러셀에 표시될 최대 3개의 배너를 관리합니다.</p>
+        <h2>히어로 세션 관리 (5구)</h2>
+        <p style={{ color: '#666', marginTop: '0.5rem' }}>메인 페이지 상단 캐러셀에 표시될 최대 5개의 배너를 관리합니다.</p>
       </div>
 
       <div style={{ display: 'flex', gap: '1rem', marginTop: '2rem', borderBottom: '1px solid #eee', paddingBottom: '1rem' }}>
-        {[0, 1, 2].map((idx) => (
+        {[0, 1, 2, 3, 4].map((idx) => (
           <button
             key={idx}
             onClick={() => setActiveTab(idx)}
@@ -268,7 +270,7 @@ export default function BannerManagement() {
               opacity: isSubmitting ? 0.7 : 1,
             }}
           >
-            {isSubmitting ? "전체 저장 중..." : "3구 설정 일괄 저장하기"}
+            {isSubmitting ? "전체 저장 중..." : "5구 설정 일괄 저장하기"}
           </button>
         </div>
       </form>
