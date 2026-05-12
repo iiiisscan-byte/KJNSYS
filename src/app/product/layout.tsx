@@ -32,7 +32,7 @@ export default function ProductLayout({ children }: { children: React.ReactNode 
 
   return (
     <>
-      <div style={{ backgroundColor: '#f5f5f7', padding: '2.5rem 0', marginBottom: '0' }}>
+      <div style={{ backgroundColor: '#f5f5f7', padding: '2rem 20px', marginBottom: '0' }}>
         <div className="container" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.75rem', marginBottom: '1rem' }}>
             <div style={{ 
@@ -44,14 +44,14 @@ export default function ProductLayout({ children }: { children: React.ReactNode 
               backgroundColor: '#000',
               color: '#fff',
               borderRadius: '8px',
-              fontSize: '1.3rem'
+              fontSize: '1.2rem'
             }}>
               <FiBox />
             </div>
-            <h1 style={{ fontSize: '2.4rem', fontWeight: '800', color: '#1a1a1a', margin: 0 }}>제품</h1>
+            <h1 style={{ fontSize: 'clamp(1.8rem, 5vw, 2.4rem)', fontWeight: '800', color: '#1a1a1a', margin: 0 }}>제품</h1>
           </div>
-          <p style={{ fontSize: '1rem', color: '#666', maxWidth: '600px', margin: '0 auto', wordBreak: 'keep-all', lineHeight: '1.6' }}>
-            최상의 비즈니스 파트너, 케이제이엔시스의 혁신적인 <br />이미지 프로세싱 및 스캐닝 제품군을 만나보세요.
+          <p style={{ fontSize: '0.95rem', color: '#666', maxWidth: '600px', margin: '0 auto', wordBreak: 'keep-all', lineHeight: '1.6' }}>
+            최상의 비즈니스 파트너, 케이제이엔시스의 혁신적인 이미지 프로세싱 및 스캐닝 제품군을 만나보세요.
           </p>
         </div>
       </div>

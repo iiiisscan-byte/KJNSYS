@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState, use } from "react";
-import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 
 interface Product {
@@ -108,8 +107,8 @@ export default function ProductPage({ searchParams }: { searchParams: Promise<{ 
 
   return (
     <div className="container mt-4 mb-8">
-      <div style={{ marginBottom: '3rem', borderBottom: '1px solid #eee', paddingBottom: '1rem' }}>
-        <h2 style={{ fontSize: '1.8rem', fontWeight: '700', color: '#333' }}>{categoryName}</h2>
+      <div style={{ marginBottom: '2.5rem', borderBottom: '2px solid #004a99', paddingBottom: '0.8rem', display: 'inline-block' }}>
+        <h2 style={{ fontSize: 'clamp(1.4rem, 4vw, 1.8rem)', fontWeight: '700', color: '#1a1a1a', margin: 0 }}>{categoryName}</h2>
       </div>
       
       {products.length === 0 ? (
@@ -119,7 +118,7 @@ export default function ProductPage({ searchParams }: { searchParams: Promise<{ 
       ) : (
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '2.5rem' }}>
           {products.map((product) => (
-            <Link 
+            <a 
               key={product.id} 
               href={`/product/${product.id}`}
               style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}
@@ -150,7 +149,7 @@ export default function ProductPage({ searchParams }: { searchParams: Promise<{ 
                   </div>
                 </div>
               </div>
-            </Link>
+            </a>
           ))}
         </div>
       )}

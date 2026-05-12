@@ -47,9 +47,25 @@
   font-weight: 700;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .navList {
-    justify-content: center;
-    padding: 1rem 0.5rem;
+    justify-content: flex-start;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    padding: 1rem 0;
+    -webkit-overflow-scrolling: touch;
+    gap: 0.5rem;
+  }
+
+  .navLink {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.95rem;
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 768px) {
+  .lnbContainer {
+    margin-bottom: 2rem;
   }
 }
