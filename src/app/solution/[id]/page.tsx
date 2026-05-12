@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 import { FiArrowLeft, FiClock, FiTag } from "react-icons/fi";
+import styles from "./SolutionDetail.module.css";
 
 interface Solution {
   id: string;
@@ -53,157 +54,111 @@ export default function SolutionDetailPage({ params }: { params: Promise<{ id: s
   if (!solution) return null;
 
   return (
-    <div style={{ width: '100%' }}>
-      {/* 제품소개 섹션 */}
-      <div style={{ backgroundColor: '#ffffff', paddingTop: '3rem', paddingBottom: '5rem' }}>
+    <div className={styles.detailWrapper}>
+      {/* 솔루션 소개 섹션 */}
+      <div className={styles.introSection}>
         <div className="container">
           {/* 상단 네비게이션 */}
-      <div style={{ marginBottom: '2rem' }}>
-        <button 
-          onClick={() => router.back()} 
-          style={{ 
-            display: 'inline-flex', 
-            alignItems: 'center', 
-            gap: '0.5rem', 
-            background: 'none', 
-            border: 'none', 
-            color: '#666', 
-            cursor: 'pointer',
-            fontSize: '1rem'
-          }}
-        >
-          <FiArrowLeft /> 목록으로 돌아가기
-        </button>
-      </div>
-
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.2fr', gap: '4rem', marginBottom: '4rem' }}>
-        {/* 솔루션 메인 이미지 */}
-        <div style={{ 
-          backgroundColor: '#fff', 
-          border: '1px solid #eee', 
-          borderRadius: '16px', 
-          padding: '2rem',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          height: '450px'
-        }}>
-          {solution.image_url ? (
-            <img src={solution.image_url} alt={solution.title} style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }} />
-          ) : (
-            <div style={{ color: '#ccc' }}>대표 이미지가 없습니다.</div>
-          )}
-        </div>
-
-        {/* 솔루션 정보 */}
-        <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-          <h1 style={{ fontSize: '2.5rem', fontWeight: '800', color: '#1a1a1a', marginBottom: '1.5rem', lineHeight: '1.3', letterSpacing: '-0.02em' }}>
-            {solution.title}
-          </h1>
-          
-          <div style={{ fontSize: '1.05rem', color: '#555', lineHeight: '1.8', wordBreak: 'break-word', whiteSpace: 'pre-line', marginBottom: '2.5rem' }}>
-            {solution.description || "본 솔루션에 대한 소개가 등록되지 않았습니다."}
+          <div style={{ marginBottom: '2rem' }}>
+            <button 
+              onClick={() => router.back()} 
+              className={styles.backBtn}
+            >
+              <FiArrowLeft /> 목록으로 돌아가기
+            </button>
           </div>
-          
-          <div style={{ borderTop: '1px solid #eee', paddingTop: '1.5rem', display: 'flex', gap: '2rem' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#888', fontSize: '0.9rem' }}>
-              <FiClock /> 제조사: {solution.manufacturer || "-"}
+
+          <div className={styles.mainGrid}>
+            {/* 솔루션 이미지 */}
+            <div className={styles.imageBox}>
+              {solution.image_url ? (
+                <img src={solution.image_url} alt={solution.title} className={styles.solutionImage} />
+              ) : (
+                <div style={{ color: '#ccc' }}>대표 이미지가 없습니다.</div>
+              )}
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#888', fontSize: '0.9rem' }}>
-              <FiTag /> 분류: {solution.categories.name}
+
+            {/* 솔루션 정보 */}
+            <div className={styles.infoBox}>
+              <h1 className={styles.title}>
+                {solution.title}
+              </h1>
+              
+              <div className={styles.description}>
+                {solution.description || "본 솔루션에 대한 소개가 등록되지 않았습니다."}
+              </div>
+              
+              <div className={styles.metaInfo}>
+                <div className={styles.metaItem}>
+                  <FiClock /> 제조사: {solution.manufacturer || "-"}
+                </div>
+                <div className={styles.metaItem}>
+                  <FiTag /> 분류: {solution.categories.name}
+                </div>
+              </div>
+              
+              <div style={{ marginTop: '3rem' }}>
+                <Link href="/service/inquiry" className={styles.inquiryBtn}>
+                  솔루션 도입 문의하기
+                </Link>
+              </div>
             </div>
           </div>
-          
-          <div style={{ marginTop: '3rem' }}>
-            <Link href="/service/inquiry" style={{ 
-              display: 'inline-block',
-              padding: '1.2rem 3rem',
-              backgroundColor: '#004a99',
-              color: '#fff',
-              textDecoration: 'none',
-              borderRadius: '8px',
-              fontWeight: '700',
-              fontSize: '1.1rem'
-            }}>
-              솔루션 도입 문의하기
-            </Link>
-          </div>
         </div>
-      </div>
-      </div>
       </div>
 
       {/* 특장점 (Features) */}
       {solution.features && solution.features.length > 0 && (
-        <div style={{ backgroundColor: '#f8f9fa', padding: '5rem 0' }}>
+        <div className={styles.featuresSection}>
           <div className="container">
-            <h3 style={{ fontSize: '2rem', fontWeight: '800', textAlign: 'center', marginBottom: '3rem', color: '#004a99' }}>솔루션 특장점</h3>
-          <div style={{ 
-            display: 'grid', 
-            gridTemplateColumns: '1fr', 
-            gap: '3rem' 
-          }}>
-            {solution.features.map((feature: any, idx: number) => (
-              <div key={idx} style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '3rem', padding: '2.5rem', backgroundColor: '#fff', borderRadius: '16px', boxShadow: '0 4px 20px rgba(0,0,0,0.03)' }}>
-                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '1.2rem' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                    <h4 style={{ fontSize: '1.4rem', fontWeight: '800', color: '#1a1a1a', margin: 0 }}>
+            <h3 className={styles.sectionTitle}>솔루션 특장점</h3>
+            <div className={styles.featureList}>
+              {solution.features.map((feature: any, idx: number) => (
+                <div key={idx} className={styles.featureCard}>
+                  <div className={styles.featureContent}>
+                    <h4 className={styles.featureTitle}>
                       {feature.title}
                     </h4>
+                    <p className={styles.featureDesc}>
+                      {feature.description}
+                    </p>
                   </div>
-                  <p style={{ fontSize: '1.05rem', color: '#555', lineHeight: '1.7', wordBreak: 'keep-all', margin: 0 }}>
-                    {feature.description}
-                  </p>
+                  {feature.image_url && (
+                    <div className={styles.featureImageBox}>
+                      <img src={feature.image_url} alt={`${feature.title} 상세 이미지`} className={styles.featureImage} />
+                    </div>
+                  )}
                 </div>
-                {feature.image_url && (
-                  <div style={{ width: '45%', flexShrink: 0, backgroundColor: 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <img src={feature.image_url} alt={`${feature.title} 상세 이미지`} style={{ maxWidth: '100%', maxHeight: '300px', objectFit: 'contain', borderRadius: '12px', mixBlendMode: 'multiply' }} />
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
           </div>
         </div>
       )}
 
-      {/* 제품 사양 (Specifications) */}
+      {/* 솔루션 사양 (Specifications) */}
       {solution.specifications && solution.specifications.length > 0 && (
-        <div style={{ backgroundColor: '#ffffff', padding: '5rem 0', borderTop: '1px solid #eee' }}>
+        <div className={styles.specSection}>
           <div className="container">
-            <h3 style={{ fontSize: '2rem', fontWeight: '800', textAlign: 'center', marginBottom: '3rem', color: '#004a99' }}>사양 및 요구사항</h3>
-          <div style={{ maxWidth: '800px', margin: '0 auto', borderTop: '2px solid #004a99' }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse', backgroundColor: '#fff' }}>
-              <tbody>
-                {solution.specifications.map((spec: any, idx: number) => (
-                  <tr key={idx} style={{ borderBottom: '1px solid #eee' }}>
-                    <th style={{ 
-                      width: '30%', 
-                      padding: '1.5rem', 
-                      backgroundColor: '#f4f9ff', 
-                      textAlign: 'left',
-                      fontWeight: '700',
-                      color: '#004a99',
-                      fontSize: '1.05rem'
-                    }}>
-                      {spec.label}
-                    </th>
-                    <td style={{ 
-                      padding: '1.5rem', 
-                      color: '#444',
-                      fontSize: '1.05rem',
-                      lineHeight: '1.5'
-                    }}>
-                      {spec.value}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-            <p style={{ marginTop: '1.5rem', fontSize: '0.9rem', color: '#888', textAlign: 'right' }}>
-              * 상기 설명된 제품사양은 예고없이 변경될 수 있습니다.
-            </p>
-          </div>
+            <h3 className={styles.sectionTitle}>사양 및 요구사항</h3>
+            <div className={styles.specTableContainer}>
+              <table className={styles.specTable}>
+                <tbody>
+                  {solution.specifications.map((spec: any, idx: number) => (
+                    <tr key={idx}>
+                      <th className={styles.specTh}>
+                        {spec.label}
+                      </th>
+                      <td className={styles.specTd}>
+                        {spec.value}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              <p className={styles.specNote}>
+                * 상기 설명된 제품사양은 예고없이 변경될 수 있습니다.
+              </p>
+            </div>
           </div>
         </div>
       )}
