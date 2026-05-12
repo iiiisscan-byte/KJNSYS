@@ -114,11 +114,11 @@
 }
 
 .prevButton {
-  left: -25px;
+  left: 0px;
 }
 
 .nextButton {
-  right: -25px;
+  right: 0px;
 }
 
 @media (max-width: 768px) {
@@ -147,10 +147,10 @@
   }
   
   .prevButton {
-    left: -5px;
+    left: 0px;
   }
   
   .nextButton {
-    right: -5px;
+    right: 0px;
   }
 }
