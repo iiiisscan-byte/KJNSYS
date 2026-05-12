@@ -23,7 +23,7 @@ export default function Header() {
     <header className={styles.header}>
       <div className={`container ${styles.container}`}>
         <Link href="/" className={styles.logo} onClick={closeMenu}>
-          <img src="/logo.png" alt="케이제이엔시스 로고" style={{ height: "40px", width: "auto", display: "block" }} />
+          <img src="/logo.png" alt="케이제이엔시스 로고" style={{ height: "50px", width: "auto", display: "block" }} />
         </Link>
         
         <nav className={styles.nav}>
