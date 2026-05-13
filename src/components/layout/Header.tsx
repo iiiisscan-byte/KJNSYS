@@ -20,7 +20,7 @@ export default function Header() {
   const closeMenu = () => setIsMobileOpen(false);
 
   return (
-    <header className={styles.header}>
+    <header className={`${styles.header} ${isMobileOpen ? styles.headerOpen : ""}`}>
       <div className={`container ${styles.container}`}>
         <Link href="/" className={styles.logo} onClick={closeMenu}>
           <img src="/logo.png" alt="케이제이엔시스 로고" style={{ height: "50px", width: "auto", display: "block" }} />
