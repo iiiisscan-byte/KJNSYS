@@ -50,7 +50,7 @@ export default function SolutionLayout({ children }: { children: React.ReactNode
             <h1 style={{ fontSize: 'clamp(1.8rem, 5vw, 2.4rem)', fontWeight: '800', color: '#1a1a1a', margin: 0 }}>솔루션</h1>
           </div>
           <p style={{ fontSize: '1rem', color: '#666', maxWidth: '800px', margin: '0 auto', wordBreak: 'keep-all', lineHeight: '1.6' }}>
-            효율적인 디지털 전환과 보안 강화를 위한 케이제이엔시스만의 최적화된 맞춤형 솔루션을 제공합니다.
+            케이제이엔시스는 효율적인 디지털 전환과 강력한 보안 중점 업무환경 구축을 위한 솔루션을 제안합니다.
           </p>
         </div>
       </div>
