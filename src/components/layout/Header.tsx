@@ -25,15 +25,15 @@ export default function Header() {
         <Link href="/" className={styles.logo} onClick={closeMenu}>
           <img src="/logo.png" alt="케이제이엔시스 로고" style={{ height: "50px", width: "auto", display: "block" }} />
         </Link>
-        
+
         <nav className={styles.nav}>
           {navItems.map((item) => (
             item.external ? (
-              <a 
-                key={item.label} 
-                href={item.href} 
-                target="_blank" 
-                rel="noopener noreferrer" 
+              <a
+                key={item.label}
+                href={item.href}
+                target="_blank"
+                rel="noopener noreferrer"
                 className={styles.navLink}
               >
                 {item.label}
@@ -46,7 +46,7 @@ export default function Header() {
           ))}
         </nav>
 
-        <button 
+        <button
           className={styles.mobileMenuBtn}
           onClick={toggleMenu}
           aria-label={isMobileOpen ? "메뉴 닫기" : "메뉴 열기"}
@@ -54,26 +54,26 @@ export default function Header() {
           {isMobileOpen ? <FiX /> : <FiMenu />}
         </button>
       </div>
-      
+
       {/* Mobile Menu Implementation */}
       <div className={`${styles.mobileMenu} ${isMobileOpen ? styles.open : ""}`}>
         <nav className={styles.mobileNav}>
           {navItems.map((item) => (
             item.external ? (
-              <a 
-                key={item.label} 
-                href={item.href} 
-                target="_blank" 
-                rel="noopener noreferrer" 
+              <a
+                key={item.label}
+                href={item.href}
+                target="_blank"
+                rel="noopener noreferrer"
                 className={styles.mobileNavLink}
                 onClick={closeMenu}
               >
                 {item.label}
               </a>
             ) : (
-              <Link 
-                key={item.label} 
-                href={item.href} 
+              <Link
+                key={item.label}
+                href={item.href}
                 className={styles.mobileNavLink}
                 onClick={closeMenu}
               >

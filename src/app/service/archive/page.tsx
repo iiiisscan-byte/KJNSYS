@@ -52,8 +52,23 @@ export default function ArchivePage() {
     // 다운로드 횟수 증가 (선택 사항)
     await supabase.rpc('increment_download_count', { row_id: id });
     
-    // 새 창에서 파일 열기/다운로드
-    window.open(url, '_blank');
+    // URL에서 원래 파일의 확장자 추출 (예: pdf, zip 등)
+    const fileExt = url.split('.').pop()?.split('?')[0] || 'file';
+    
+    // 다운로드될 파일명 생성 (자료 제목 + 확장자)
+    const downloadFilename = `${filename}.${fileExt}`;
+    
+    // Supabase의 다운로드 파라미터 추가
+    const downloadUrl = `${url}?download=${encodeURIComponent(downloadFilename)}`;
+
+    // 브라우저에서 강제 다운로드 실행
+    const a = document.createElement('a');
+    a.href = downloadUrl;
+    // 브라우저에 따라 a.download 속성을 지원하는 경우
+    a.download = downloadFilename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
   };
 
   return (
