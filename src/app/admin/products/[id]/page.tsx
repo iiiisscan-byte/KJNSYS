@@ -164,7 +164,7 @@ export default function EditProduct({ params }: { params: Promise<{ id: string }
       // 제품사양 처리
       const processedSpecs = specifications.map(s => ({ label: s.label, value: s.value }));
 
-      const { error } = await supabase.from("products").update({
+      const { data, error } = await supabase.from("products").update({
         title,
         manufacturer,
         category_id: categoryId,
@@ -173,11 +173,16 @@ export default function EditProduct({ params }: { params: Promise<{ id: string }
         features: processedFeatures,
         specifications: processedSpecs,
         image_url: imageUrl
-      }).eq("id", id);
+      }).eq("id", id).select();
 
       if (error) throw error;
       
+      if (!data || data.length === 0) {
+        throw new Error("DB에 반영되지 않았습니다. (RLS 보안 정책 문제일 가능성이 높습니다.)");
+      }
+      
       alert("성공적으로 수정되었습니다.");
+      router.refresh(); // Next.js 라우터 캐시 강제 새로고침
       router.push("/admin/products");
     } catch (error: any) {
       console.error("수정 에러:", error);
