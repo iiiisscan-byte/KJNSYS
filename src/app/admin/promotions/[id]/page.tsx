@@ -91,7 +91,7 @@ export default function EditPromotionPage() {
         finalImageUrl = await uploadImage(imageFile);
       }
 
-      const { error } = await supabase
+      const { data, error } = await supabase
         .from("promotions")
         .update({
           title,
@@ -102,11 +102,17 @@ export default function EditPromotionPage() {
           badge,
           is_active: isActive
         })
-        .eq("id", params.id);
+        .eq("id", params.id)
+        .select();
 
       if (error) throw error;
+      
+      if (!data || data.length === 0) {
+        throw new Error("DB에 반영되지 않았습니다. (RLS 정책을 확인해 주세요.)");
+      }
 
       alert("프로모션이 수정되었습니다.");
+      router.refresh();
       router.push("/admin/promotions");
     } catch (error: any) {
       alert(`수정 중 오류 발생: ${error.message}`);
