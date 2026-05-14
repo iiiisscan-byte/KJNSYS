@@ -1,0 +1,25 @@
+.popup {
+  position: fixed;
+  z-index: 1000;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.25);
+  border-radius: 20px;
+  overflow: hidden;
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  max-width: 90vw;
+  max-height: 90vh;
+}
+
+@media (max-width: 768px) {
+  .popup {
+    /* 모바일/태블릿 환경에서는 화면 중앙에 배치하거나, 
+       설정된 위치보다 화면 크기에 맞게 자동 조정되도록 합니다. */
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%);
+    width: 90vw !important;
+    height: auto !important;
+    max-height: 80vh;
+  }
+}

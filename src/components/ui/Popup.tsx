@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { FiX } from "react-icons/fi";
+import styles from "./Popup.module.css";
 
 interface PopupProps {
   id: string;
@@ -47,20 +48,15 @@ export default function Popup({ id, title, content, linkUrl, width, height, top,
   );
 
   return (
-    <div style={{ 
-      position: 'fixed', 
-      top: `${top}px`, 
-      left: `${left}px`, 
-      width: `${width}px`, 
-      height: `${height}px`, 
-      zIndex: 1000, 
-      boxShadow: '0 15px 40px rgba(0,0,0,0.25)',
-      borderRadius: '20px',
-      overflow: 'hidden',
-      backgroundColor: '#fff',
-      display: 'flex',
-      flexDirection: 'column'
-    }}>
+    <div 
+      className={styles.popup}
+      style={{ 
+        top: `${top}px`, 
+        left: `${left}px`, 
+        width: `${width}px`, 
+        height: `${height}px`, 
+      }}
+    >
       {/* Header */}
       <div style={{ 
         backgroundColor: '#e63946', 
