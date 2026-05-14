@@ -90,7 +90,7 @@ export default function Carousel() {
 
   useEffect(() => {
     if (slides.length <= 1) return;
-    const timer = setInterval(nextSlide, 5000);
+    const timer = setInterval(nextSlide, 10000);
     return () => clearInterval(timer);
   }, [slides.length]);
 
