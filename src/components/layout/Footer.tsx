@@ -14,7 +14,6 @@ export default function Footer() {
             <p>경기도 용인시 기흥구 흥덕1로 13, 흥덕IT밸리 컴플렉스 B동 508호</p>
             <p>사업자번호 : 124-86-12790 &nbsp;|&nbsp; 대표자 : 승인배</p>
             <p>전화 : 031-273-9171 &nbsp;|&nbsp; 팩스 : 031-660-7066</p>
-            <p>이메일 : isscan@kjnsys.com</p>
           </div>
 
           <div className={styles.linkSections}>

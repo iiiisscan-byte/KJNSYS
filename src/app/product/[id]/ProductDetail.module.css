@@ -81,7 +81,8 @@
 
 .metaInfo {
   display: flex;
-  gap: 2rem;
+  gap: 1.5rem;
+  flex-wrap: nowrap;
 }
 
 .metaItem {
@@ -274,9 +275,10 @@
   }
 
   .metaInfo {
-    flex-direction: column;
-    gap: 0.5rem;
-  }
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: nowrap;
+}
 
   .featureCard {
     flex-direction: column;

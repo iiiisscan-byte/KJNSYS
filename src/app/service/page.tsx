@@ -31,7 +31,7 @@ export default function ServicePage() {
             <li className={styles.infoItem}>
               <div className={styles.label}>이메일</div> 
               <div className={styles.value}>
-                <a href="mailto:isscan@kjnsys.com" style={{ color: '#004a99', textDecoration: 'none' }}>isscan@kjnsys.com</a>
+                <a href="mailto:woojae@kjnsys.com" style={{ color: '#004a99', textDecoration: 'none' }}>woojae@kjnsys.com</a>
               </div>
             </li>
           </ul>

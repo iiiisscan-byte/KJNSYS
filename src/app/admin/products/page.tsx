@@ -84,6 +84,41 @@ export default function ProductManagement() {
     }
   };
 
+  const handleMove = async (index: number, direction: -1 | 1) => {
+    if (index === 0 && direction === -1) return;
+    if (index === products.length - 1 && direction === 1) return;
+
+    const currentItem = products[index];
+    const targetItem = products[index + direction];
+
+    let currentCreatedAt = currentItem.created_at;
+    let targetCreatedAt = targetItem.created_at;
+
+    if (currentCreatedAt === targetCreatedAt) {
+      const date = new Date(currentCreatedAt);
+      date.setMilliseconds(date.getMilliseconds() + (direction === -1 ? 1 : -1));
+      currentCreatedAt = date.toISOString();
+    }
+
+    const { error: error1 } = await supabase
+      .from("products")
+      .update({ created_at: targetCreatedAt })
+      .eq("id", currentItem.id);
+
+    const { error: error2 } = await supabase
+      .from("products")
+      .update({ created_at: currentCreatedAt })
+      .eq("id", targetItem.id);
+
+    if (error1 || error2) {
+      console.error("Error updating order:", error1, error2);
+      alert("순서 변경에 실패했습니다.");
+    } else {
+      fetchProducts();
+    }
+  };
+
+
   return (
     <div>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "2rem" }}>
@@ -117,11 +152,12 @@ export default function ProductManagement() {
                 <th style={{ padding: "1rem 0.5rem" }}>분류</th>
                 <th style={{ padding: "1rem 0.5rem" }}>제품/솔루션명</th>
                 <th style={{ padding: "1rem 0.5rem" }}>제조사</th>
+                <th style={{ padding: "1rem 0.5rem", textAlign: "center" }}>순서</th>
                 <th style={{ padding: "1rem 0.5rem", textAlign: "right" }}>관리</th>
               </tr>
             </thead>
             <tbody>
-              {products.map((item) => (
+              {products.map((item, index) => (
                 <tr key={item.id} style={{ borderBottom: "1px solid #f5f5f5" }}>
                   <td style={{ padding: "1rem 0.5rem" }}>
                     <button
@@ -153,6 +189,32 @@ export default function ProductManagement() {
                   <td style={{ padding: "1rem 0.5rem", fontWeight: "bold" }}>{item.title}</td>
                   <td style={{ padding: "1rem 0.5rem", color: "#666", fontSize: "0.9rem" }}>
                     {item.manufacturer || "-"}
+                  </td>
+                  <td style={{ padding: "1rem 0.5rem", textAlign: "center" }}>
+                    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "0.5rem" }}>
+                      <button 
+                        onClick={() => handleMove(index, -1)} 
+                        disabled={index === 0}
+                        style={{ 
+                          background: "none", border: "1px solid #ddd", borderRadius: "4px", padding: "0.2rem 0.4rem", 
+                          cursor: index === 0 ? "default" : "pointer", opacity: index === 0 ? 0.3 : 1 
+                        }}
+                        title="위로 이동"
+                      >
+                        ▲
+                      </button>
+                      <button 
+                        onClick={() => handleMove(index, 1)} 
+                        disabled={index === products.length - 1}
+                        style={{ 
+                          background: "none", border: "1px solid #ddd", borderRadius: "4px", padding: "0.2rem 0.4rem", 
+                          cursor: index === products.length - 1 ? "default" : "pointer", opacity: index === products.length - 1 ? 0.3 : 1 
+                        }}
+                        title="아래로 이동"
+                      >
+                        ▼
+                      </button>
+                    </div>
                   </td>
                   <td style={{ padding: "1rem 0.5rem", textAlign: "right" }}>
                     <div style={{ display: "flex", gap: "0.5rem", justifyContent: "flex-end" }}>

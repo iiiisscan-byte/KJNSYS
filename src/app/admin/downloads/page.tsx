@@ -124,6 +124,40 @@ export default function DownloadManagement() {
     }
   };
 
+  const handleMove = async (index: number, direction: -1 | 1) => {
+    if (index === 0 && direction === -1) return;
+    if (index === downloads.length - 1 && direction === 1) return;
+
+    const currentItem = downloads[index];
+    const targetItem = downloads[index + direction];
+
+    let currentCreatedAt = currentItem.created_at;
+    let targetCreatedAt = targetItem.created_at;
+
+    if (currentCreatedAt === targetCreatedAt) {
+      const date = new Date(currentCreatedAt);
+      date.setMilliseconds(date.getMilliseconds() + (direction === -1 ? 1 : -1));
+      currentCreatedAt = date.toISOString();
+    }
+
+    const { error: error1 } = await supabase
+      .from("downloads")
+      .update({ created_at: targetCreatedAt })
+      .eq("id", currentItem.id);
+
+    const { error: error2 } = await supabase
+      .from("downloads")
+      .update({ created_at: currentCreatedAt })
+      .eq("id", targetItem.id);
+
+    if (error1 || error2) {
+      console.error("Error updating order:", error1, error2);
+      alert("순서 변경에 실패했습니다.");
+    } else {
+      fetchDownloads();
+    }
+  };
+
   if (loading && downloads.length === 0) return <div className={styles.card}>로딩 중...</div>;
 
   return (
@@ -219,11 +253,12 @@ export default function DownloadManagement() {
               <th style={{ padding: "1rem" }}>분류</th>
               <th style={{ padding: "1rem" }}>제목 / 버전</th>
               <th style={{ padding: "1rem" }}>등록일</th>
+              <th style={{ padding: "1rem", textAlign: "center" }}>순서</th>
               <th style={{ padding: "1rem", textAlign: "right" }}>관리</th>
             </tr>
           </thead>
           <tbody>
-            {downloads.map((item) => (
+            {downloads.map((item, index) => (
               <tr key={item.id} style={{ borderBottom: "1px solid #f5f5f5" }}>
                 <td style={{ padding: "1rem" }}>
                   <span style={{ 
@@ -243,6 +278,32 @@ export default function DownloadManagement() {
                 <td style={{ padding: "1rem", color: "#888", fontSize: "0.9rem" }}>
                   {new Date(item.created_at).toLocaleDateString()}
                 </td>
+                <td style={{ padding: "1rem", textAlign: "center" }}>
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "0.5rem" }}>
+                    <button 
+                      onClick={() => handleMove(index, -1)} 
+                      disabled={index === 0}
+                      style={{ 
+                        background: "none", border: "1px solid #ddd", borderRadius: "4px", padding: "0.2rem 0.4rem", 
+                        cursor: index === 0 ? "default" : "pointer", opacity: index === 0 ? 0.3 : 1 
+                      }}
+                      title="위로 이동"
+                    >
+                      ▲
+                    </button>
+                    <button 
+                      onClick={() => handleMove(index, 1)} 
+                      disabled={index === downloads.length - 1}
+                      style={{ 
+                        background: "none", border: "1px solid #ddd", borderRadius: "4px", padding: "0.2rem 0.4rem", 
+                        cursor: index === downloads.length - 1 ? "default" : "pointer", opacity: index === downloads.length - 1 ? 0.3 : 1 
+                      }}
+                      title="아래로 이동"
+                    >
+                      ▼
+                    </button>
+                  </div>
+                </td>
                 <td style={{ padding: "1rem", textAlign: "right" }}>
                   <button 
                     onClick={() => handleDelete(item.id)}
@@ -255,7 +316,7 @@ export default function DownloadManagement() {
             ))}
             {downloads.length === 0 && (
               <tr>
-                <td colSpan={4} style={{ padding: "3rem", textAlign: "center", color: "#999" }}>등록된 자료가 없습니다.</td>
+                <td colSpan={5} style={{ padding: "3rem", textAlign: "center", color: "#999" }}>등록된 자료가 없습니다.</td>
               </tr>
             )}
           </tbody>
