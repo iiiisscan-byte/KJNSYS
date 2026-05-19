@@ -72,9 +72,8 @@ export default function PrivacyPage() {
           <h2 className={styles.sectionTitle}>7. 개인정보 보호책임자 및 상담신고</h2>
           <p className={styles.paragraph}>회사는 고객의 개인정보를 보호하고 개인정보와 관련한 불만을 처리하기 위하여 아래와 같이 관련 부서 및 개인정보 보호책임자를 지정하고 있습니다.</p>
           <ul className={styles.list}>
-            <li className={styles.listItem}>개인정보 보호책임자: 승인배</li>
+            <li className={styles.listItem}>개인정보 보호책임자: 김영덕</li>
             <li className={styles.listItem}>전화번호: 031-273-9171</li>
-            <li className={styles.listItem}>이메일: isscan@kjnsys.com</li>
           </ul>
         </div>
       </div>
